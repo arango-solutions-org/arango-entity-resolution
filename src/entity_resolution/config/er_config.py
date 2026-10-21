@@ -980,6 +980,19 @@ class LLMProviderConfig:
         self.healthcheck_on_start = healthcheck_on_start
         self.fallback_provider = fallback_provider
 
+        if fallback_provider is not None:
+            import warnings
+
+            # Parsed and validated so existing configs still load, but nothing
+            # reads it: a failed call is not retried against another provider.
+            warnings.warn(
+                f"LLMProviderConfig.fallback_provider={fallback_provider!r} has no "
+                "effect: provider fallback is not implemented, so a failed LLM "
+                "call is not retried against another provider.",
+                UserWarning,
+                stacklevel=2,
+            )
+
     def to_litellm_model_string(self) -> Optional[str]:
         """Return the litellm model string, or ``None`` if model is unset."""
         if not self.model:

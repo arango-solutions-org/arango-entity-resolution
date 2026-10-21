@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import warnings
+
 import pytest
 
 from entity_resolution.config.er_config import (
     ActiveLearningConfig,
+    ERPipelineConfig,
     LLMProviderConfig,
 )
 
@@ -75,6 +78,45 @@ class TestLLMProviderConfig:
         cfg = LLMProviderConfig(timeout_seconds=0)
         errors = cfg.validate()
         assert any("timeout" in e for e in errors)
+
+
+class TestFallbackProviderWarning:
+    """fallback_provider is parsed but nothing acts on it, so setting it warns.
+
+    It left the shipped scope in the 2026-10-20 PRD review. Configs that set
+    it must still load, but the user has to be told the setting does nothing.
+    """
+
+    def test_setting_it_warns_that_it_has_no_effect(self):
+        with pytest.warns(UserWarning, match=r"fallback_provider='ollama' has no effect"):
+            cfg = LLMProviderConfig(provider="openrouter", fallback_provider="ollama")
+        assert cfg.fallback_provider == "ollama"  # still parsed and round-tripped
+        assert cfg.to_dict()["fallback_provider"] == "ollama"
+
+    def test_leaving_it_unset_does_not_warn(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            LLMProviderConfig(provider="openrouter", model="google/gemini-2.0-flash")
+            LLMProviderConfig.from_dict({"provider": "ollama", "model": "mistral"})
+
+    def test_a_yaml_config_that_sets_it_warns_and_still_loads(self, tmp_path):
+        # The route a user actually takes: a pipeline config file.
+        path = tmp_path / "er.yaml"
+        path.write_text(
+            "entity_resolution:\n"
+            "  entity_type: company\n"
+            "  collection_name: companies\n"
+            "  active_learning:\n"
+            "    enabled: true\n"
+            "    llm:\n"
+            "      provider: openrouter\n"
+            "      model: google/gemini-2.0-flash\n"
+            "      fallback_provider: ollama\n",
+            encoding="utf-8",
+        )
+        with pytest.warns(UserWarning, match="has no effect"):
+            config = ERPipelineConfig.from_yaml(path)
+        assert config.active_learning.llm.fallback_provider == "ollama"
 
 
 # ---------------------------------------------------------------------------

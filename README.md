@@ -203,7 +203,8 @@ records except those starting with `_`. Fields listed in `mask_fields` are sent
 as a stable hash instead, so the model can still see that two values are equal
 but never sees the values. Masking costs verdict quality on anything fuzzy, so
 reserve it for identifiers. A local `ollama/` model sends nothing off the machine.
-`fallback_provider` is accepted by the config but not yet acted on.
+`fallback_provider` is not implemented: the config still parses it, but a failed
+call is not retried against another provider, and setting it raises a `UserWarning`.
 
 The LLM receives both records, the overall similarity score, and field-level scores, and returns a structured JSON verdict with decision, confidence, and reasoning. When the LLM overrides a score, the system synthesises a new score that pushes the pair above or below the thresholds so downstream clustering reflects the decision.
 

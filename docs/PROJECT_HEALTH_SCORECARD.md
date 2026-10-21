@@ -151,9 +151,9 @@ register can be read as a history rather than only a snapshot.
 7. **Verification-tier defaults — P2 product constraint.** The LLM tier works
    with a competent model, and the provider docs now say that the local model
    does not. The shipped 0.55–0.80 band still holds only 8.5% of errors; derive
-   it from the error distribution (proposed PRD patch REQ-L05).
-   `fallback_provider` is parsed and never acted on (drift alert
-   REQ-LLM-FALLBACK).
+   it from the error distribution (PRD requirement REQ-L05, open drift alert).
+   `fallback_provider` left the shipped scope; the config still parses it and
+   warns that it has no effect.
 8. **CI health is unmonitored — P1 process constraint.** The Python CI workflow
    failed on every run for seven weeks, and nobody noticed, because a gate that
    is always red is not read. Add a check that surfaces a red default branch at

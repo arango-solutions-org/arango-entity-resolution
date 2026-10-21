@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `similarity.matches_found`, ...); the old ones were never returned by a run
   that completed.
 
+### Changed
+
+- Setting `LLMProviderConfig.fallback_provider` now raises a `UserWarning`. The
+  field was always parsed and validated, but nothing reads it: a failed LLM call
+  is not retried against another provider. Configs that set it still load.
+
 ## [3.10.0] - 2026-10-21
 
 ### Added
