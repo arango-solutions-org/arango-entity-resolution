@@ -18,7 +18,13 @@ import pytest
 # ===========================================================================
 
 class TestAsyncERPipeline:
-    """AsyncERPipeline wraps the sync pipeline in asyncio."""
+    """AsyncERPipeline wraps the sync pipeline in asyncio.
+
+    These tests used to patch out all three stage methods of the object under
+    test, so they passed while every stage was broken. They now use real
+    objects; the end-to-end parity with a sync run against a real database is
+    in tests/test_async_pipeline_integration.py.
+    """
 
     def _make_config(self):
         from entity_resolution.config.er_config import (
@@ -32,82 +38,45 @@ class TestAsyncERPipeline:
             clustering=ClusteringConfig(),
         )
 
-    def test_init_with_config(self):
+    def test_init_builds_the_real_sync_pipeline(self):
         from entity_resolution.core.async_pipeline import AsyncERPipeline
-        db = MagicMock()
-        pipeline = AsyncERPipeline(db=db, config=self._make_config())
+        from entity_resolution.core.configurable_pipeline import ConfigurableERPipeline
+
+        config = self._make_config()
+        pipeline = AsyncERPipeline(db=None, config=config)
         assert pipeline.config.collection_name == "companies"
+        assert isinstance(pipeline._pipeline, ConfigurableERPipeline)
+        assert pipeline._pipeline.config is config
 
     def test_init_requires_config_or_path(self):
         from entity_resolution.core.async_pipeline import AsyncERPipeline
         with pytest.raises(ValueError, match="Either config or config_path"):
-            AsyncERPipeline(db=MagicMock())
+            AsyncERPipeline(db=None)
 
-    def test_run_returns_stage_results(self):
-        """Full run returns a dict keyed by stage name."""
+    def test_a_pipeline_failure_is_raised_by_the_stream(self, monkeypatch):
+        # With no database the real pipeline fails in blocking. The failure must
+        # surface from run(), not hang the event loop or vanish in a thread.
         from entity_resolution.core.async_pipeline import AsyncERPipeline
 
-        pipeline = AsyncERPipeline(db=MagicMock(), config=self._make_config())
+        monkeypatch.setenv("ER_NO_MIGRATE", "1")
+        pipeline = AsyncERPipeline(db=None, config=self._make_config())
+        with pytest.raises(AttributeError):
+            asyncio.run(asyncio.wait_for(pipeline.run(), timeout=30))
 
-        # Patch the private helpers to avoid real DB calls
-        async def fake_blocking(loop, strategy_names=None):
-            return {"total_unique_pairs": 5, "merged_pairs": [["a", "b"]], "strategies_run": ["exact"], "strategy_stats": {}}
-
-        with patch.object(pipeline, "_run_blocking_concurrent", side_effect=fake_blocking):
-            with patch.object(pipeline, "_sync_similarity", return_value={"matches_found": 3, "edges_created": 3}):
-                with patch.object(pipeline, "_sync_clustering", return_value={"clusters_found": 2, "total_entities": 4}):
-                    results = asyncio.run(pipeline.run())
-
-        assert "blocking" in results
-        assert "similarity" in results
-        assert "clustering" in results
-        assert results["blocking"]["total_unique_pairs"] == 5
-        assert results["similarity"]["matches_found"] == 3
-        assert results["clustering"]["clusters_found"] == 2
-
-    def test_run_streaming_yields_in_order(self):
-        """Streaming yields stages in pipeline order."""
+    def test_concurrent_blocking_rejects_unknown_strategies(self):
         from entity_resolution.core.async_pipeline import AsyncERPipeline
 
-        pipeline = AsyncERPipeline(db=MagicMock(), config=self._make_config())
+        pipeline = AsyncERPipeline(db=None, config=self._make_config())
+        with pytest.raises(ValueError, match="unknown blocking strategies"):
+            asyncio.run(pipeline.run_blocking_concurrent(["collect"]))
 
-        async def fake_blocking(loop, strategy_names=None):
-            return {"total_unique_pairs": 2, "merged_pairs": [], "strategies_run": ["exact"], "strategy_stats": {}}
+    def test_pair_keys_are_order_independent_across_formats(self):
+        from entity_resolution.core.async_pipeline import _pair_key
 
-        async def collect_stages():
-            stages = []
-            with patch.object(pipeline, "_run_blocking_concurrent", side_effect=fake_blocking):
-                with patch.object(pipeline, "_sync_similarity", return_value={"matches_found": 1, "edges_created": 1}):
-                    with patch.object(pipeline, "_sync_clustering", return_value={"clusters_found": 1, "total_entities": 2}):
-                        async for name, _ in pipeline.run_streaming():
-                            stages.append(name)
-            return stages
-
-        stages = asyncio.run(collect_stages())
-        assert stages == ["blocking", "similarity", "clustering"]
-
-    def test_progress_callback_called(self):
-        """progress_callback is awaited after each stage."""
-        from entity_resolution.core.async_pipeline import AsyncERPipeline
-
-        called = []
-
-        async def callback(stage, result):
-            called.append(stage)
-
-        pipeline = AsyncERPipeline(db=MagicMock(), config=self._make_config(), progress_callback=callback)
-
-        async def fake_blocking(loop, strategy_names=None):
-            return {"total_unique_pairs": 0, "merged_pairs": [], "strategies_run": [], "strategy_stats": {}}
-
-        async def run():
-            with patch.object(pipeline, "_run_blocking_concurrent", side_effect=fake_blocking):
-                with patch.object(pipeline, "_sync_similarity", return_value={"matches_found": 0, "edges_created": 0}):
-                    with patch.object(pipeline, "_sync_clustering", return_value={"clusters_found": 0, "total_entities": 0}):
-                        await pipeline.run()
-
-        asyncio.run(run())
-        assert called == ["blocking", "similarity", "clustering"]
+        assert _pair_key({"doc1_key": "b", "doc2_key": "a"}) == ("a", "b")
+        assert _pair_key(("b", "a", 0.9)) == ("a", "b")
+        assert _pair_key({"doc1_key": "a", "doc2_key": "a"}) is None
+        assert _pair_key({"doc1_key": "a"}) is None
 
 
 # ===========================================================================

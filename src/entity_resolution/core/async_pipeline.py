@@ -1,15 +1,23 @@
 """
 Async/streaming ER pipeline.
 
-Wraps the synchronous ConfigurableERPipeline in asyncio so callers can:
-- Await the full pipeline without blocking the event loop
-- Iterate pipeline stages as they complete (async generator)
-- Run blocking + similarity concurrently in a thread pool
+Runs ``ConfigurableERPipeline`` in a thread-pool executor so callers can:
+
+- await the full pipeline without blocking the event loop;
+- iterate pipeline stages as they complete (async generator);
+- run several blocking strategies concurrently and merge their candidates.
+
+It wraps the synchronous pipeline rather than reimplementing it, so an async
+run does exactly what a sync run does. An earlier version reimplemented every
+stage, and every stage was broken: it passed arguments the strategies and
+services do not accept, called a method that does not exist, and read a config
+attribute that does not exist. Its tests replaced all three stages with
+patches, so nothing noticed.
 
 Usage (await full run)::
 
     pipeline = AsyncERPipeline(db, config=cfg)
-    results = await pipeline.run()
+    results = await pipeline.run()          # same dict as ConfigurableERPipeline.run()
 
 Usage (streaming stages)::
 
@@ -18,33 +26,31 @@ Usage (streaming stages)::
 
 Usage (concurrent blocking strategies)::
 
-    candidates = await pipeline.run_blocking_concurrent(
-        strategies=["exact", "bm25", "vector"]
-    )
+    candidates = await pipeline.run_blocking_concurrent(strategies=["exact", "bm25"])
 """
 from __future__ import annotations
 
 import asyncio
+import copy
 import logging
-import time
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, AsyncIterator, Dict, List, Optional, Tuple, Union
 from pathlib import Path
+from typing import Any, AsyncIterator, Dict, List, Optional, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
 # Shared executor — reused across pipeline instances for efficiency
 _EXECUTOR = ThreadPoolExecutor(max_workers=4, thread_name_prefix="arango-er")
 
+_DONE = object()
+
 
 class AsyncERPipeline:
     """
     Async wrapper around ``ConfigurableERPipeline``.
 
-    All database-touching operations run in a thread-pool executor so they
-    never block the asyncio event loop.  Concurrent blocking strategies are
-    gathered with ``asyncio.gather``, cutting multi-strategy runs to the
-    duration of the slowest strategy instead of their sum.
+    All database work runs in a thread-pool executor so it never blocks the
+    event loop. Results are those of ``ConfigurableERPipeline.run()``.
 
     Parameters
     ----------
@@ -55,11 +61,14 @@ class AsyncERPipeline:
     config_path:
         Path to a YAML/JSON config file (used if *config* is not provided).
     executor:
-        Optional ``ThreadPoolExecutor`` to use.  Defaults to the module-level
-        shared executor.
+        Optional ``ThreadPoolExecutor``. Defaults to a module-level shared one.
     progress_callback:
         Optional ``async`` callable ``(stage: str, result: dict) -> None``
         called after each stage completes.
+    pipeline:
+        Optional pre-built ``ConfigurableERPipeline`` (or anything with the same
+        ``run(on_progress=...)`` and ``run_blocking()`` methods). Built from
+        *db* and the config when omitted.
     """
 
     def __init__(
@@ -69,8 +78,10 @@ class AsyncERPipeline:
         config_path: Optional[Union[str, Path]] = None,
         executor: Optional[ThreadPoolExecutor] = None,
         progress_callback=None,
+        pipeline=None,
     ) -> None:
         from entity_resolution.config.er_config import ERPipelineConfig
+        from entity_resolution.core.configurable_pipeline import ConfigurableERPipeline
 
         self.db = db
         self.executor = executor or _EXECUTOR
@@ -87,196 +98,119 @@ class AsyncERPipeline:
         else:
             raise ValueError("Either config or config_path must be provided")
 
+        self._pipeline = pipeline or ConfigurableERPipeline(db=db, config=self.config)
+        self._results: Optional[Dict[str, Any]] = None
+
     # ------------------------------------------------------------------
     # Public API
     # ------------------------------------------------------------------
 
     async def run(self) -> Dict[str, Any]:
-        """
-        Run the full ER pipeline asynchronously.
+        """Run the full pipeline without blocking the event loop.
 
-        Equivalent to ``ConfigurableERPipeline.run()`` but non-blocking.
-        Returns the same metrics dict.
+        Returns exactly what ``ConfigurableERPipeline.run()`` returns.
         """
-        results: Dict[str, Any] = {}
-        async for stage, result in self.run_streaming():
-            results[stage] = result
-        return results
+        async for _stage, _result in self.run_streaming():
+            pass
+        assert self._results is not None
+        return self._results
 
     async def run_streaming(self) -> AsyncIterator[Tuple[str, Dict[str, Any]]]:
-        """
-        Yield ``(stage_name, stage_result)`` as each pipeline stage completes.
+        """Yield ``(stage_name, stage_result)`` as each pipeline stage completes.
 
-        Consumers can update progress bars or stream partial results to
-        MCP clients without waiting for the full pipeline.
+        Stages arrive in the order the sync pipeline runs them (``blocking``,
+        ``similarity``, ``edges``, ``clustering``, plus ``embedding`` and
+        ``collective`` when configured). A failure in the pipeline is raised
+        here, after the stages that completed have been yielded. A consumer
+        that stops iterating early does not stop the run: the pipeline keeps
+        going in its worker thread, because a thread cannot be cancelled.
         """
         loop = asyncio.get_running_loop()
+        events: asyncio.Queue = asyncio.Queue()
 
-        # --- Stage 1: Blocking (concurrent strategies) --------------------
-        t0 = time.perf_counter()
-        blocking_result = await self._run_blocking_concurrent(loop)
-        blocking_result["duration_s"] = round(time.perf_counter() - t0, 2)
-        yield "blocking", blocking_result
-        if self.progress_callback:
-            await self.progress_callback("blocking", blocking_result)
+        def on_progress(event: Dict[str, Any]) -> None:  # called in the worker thread
+            loop.call_soon_threadsafe(events.put_nowait, event)
 
-        # --- Stage 2: Similarity ------------------------------------------
-        t0 = time.perf_counter()
-        similarity_result = await loop.run_in_executor(
-            self.executor, self._sync_similarity, blocking_result
-        )
-        similarity_result["duration_s"] = round(time.perf_counter() - t0, 2)
-        yield "similarity", similarity_result
-        if self.progress_callback:
-            await self.progress_callback("similarity", similarity_result)
+        def work() -> Dict[str, Any]:
+            try:
+                return self._pipeline.run(on_progress=on_progress)
+            finally:
+                loop.call_soon_threadsafe(events.put_nowait, _DONE)
 
-        # --- Stage 3: Clustering ------------------------------------------
-        t0 = time.perf_counter()
-        clustering_result = await loop.run_in_executor(
-            self.executor, self._sync_clustering
-        )
-        clustering_result["duration_s"] = round(time.perf_counter() - t0, 2)
-        yield "clustering", clustering_result
-        if self.progress_callback:
-            await self.progress_callback("clustering", clustering_result)
+        future = loop.run_in_executor(self.executor, work)
+        while True:
+            event = await events.get()
+            if event is _DONE:
+                break
+            if event.get("type") != "stage_complete":
+                continue
+            stage, result = event["stage"], event.get("result") or {}
+            if self.progress_callback:
+                await self.progress_callback(stage, result)
+            yield stage, result
+        self._results = await future  # re-raises a pipeline failure
 
     async def run_blocking_concurrent(
         self, strategies: Optional[List[str]] = None
     ) -> Dict[str, Any]:
+        """Run several blocking strategies concurrently and merge their candidates.
+
+        Each strategy runs through ``ConfigurableERPipeline.run_blocking()`` on a
+        copy of the config with ``blocking.strategy`` replaced, so each behaves
+        exactly as a configured run would. Defaults to the configured strategy.
+        A failing strategy is reported in ``strategy_stats`` without failing
+        the others.
         """
-        Run multiple blocking strategies concurrently and merge candidates.
+        from entity_resolution.config.er_config import BlockingConfig
+        from entity_resolution.core.configurable_pipeline import ConfigurableERPipeline
 
-        Parameters
-        ----------
-        strategies:
-            List of strategy names to run (e.g. ``["exact", "bm25", "vector"]``).
-            Defaults to all strategies configured in the pipeline config.
-        """
-        loop = asyncio.get_running_loop()
-        return await self._run_blocking_concurrent(loop, strategy_names=strategies)
-
-    # ------------------------------------------------------------------
-    # Private helpers
-    # ------------------------------------------------------------------
-
-    async def _run_blocking_concurrent(
-        self, loop: asyncio.AbstractEventLoop, strategy_names: Optional[List[str]] = None
-    ) -> Dict[str, Any]:
-        """Run configured blocking strategies concurrently via gather."""
-        from entity_resolution.strategies import (
-            CollectBlockingStrategy,
-            BM25BlockingStrategy,
-        )
-
-        collection = self.config.collection_name
-        fields = self.config.blocking.fields
-
-        # Build list of (strategy_name, callable) pairs
-        tasks_to_run = []
-        requested = set(strategy_names or [self.config.blocking.strategy])
-
-        if "exact" in requested or "collect" in requested:
-            tasks_to_run.append(("exact", lambda: self._run_exact_blocking(collection, fields)))
-        if "bm25" in requested or "arangosearch" in requested:
-            tasks_to_run.append(("bm25", lambda: self._run_bm25_blocking(collection, fields)))
-
-        if not tasks_to_run:
-            # Fall back to whatever the config says
-            tasks_to_run.append(
-                (self.config.blocking.strategy, lambda: self._run_exact_blocking(collection, fields))
+        names = list(dict.fromkeys(strategies or [self.config.blocking.strategy]))
+        unknown = [n for n in names if n not in BlockingConfig.VALID_STRATEGIES]
+        if unknown:
+            raise ValueError(
+                f"unknown blocking strategies {unknown}; valid: {list(BlockingConfig.VALID_STRATEGIES)}"
             )
 
-        # Run all strategies concurrently
-        futures = [
-            loop.run_in_executor(self.executor, fn)
-            for _, fn in tasks_to_run
-        ]
-        results_list = await asyncio.gather(*futures, return_exceptions=True)
+        def blocking_for(name: str) -> list:
+            config = copy.deepcopy(self.config)
+            config.blocking.strategy = name
+            return ConfigurableERPipeline(db=self.db, config=config).run_blocking()
 
-        # Merge candidates (deduplicate pairs)
-        merged_pairs: set = set()
+        loop = asyncio.get_running_loop()
+        outcomes = await asyncio.gather(
+            *(loop.run_in_executor(self.executor, blocking_for, name) for name in names),
+            return_exceptions=True,
+        )
+
+        merged: set = set()
         strategy_stats: Dict[str, Any] = {}
-        for (name, _), result in zip(tasks_to_run, results_list):
-            if isinstance(result, Exception):
-                logger.warning("Blocking strategy '%s' failed: %s", name, result)
-                strategy_stats[name] = {"error": str(result)}
-            else:
-                pairs = result.get("pairs", [])
-                merged_pairs.update(tuple(sorted(p)) for p in pairs)
-                strategy_stats[name] = {"pairs_found": len(pairs)}
+        for name, outcome in zip(names, outcomes):
+            if isinstance(outcome, BaseException):
+                logger.warning("Blocking strategy '%s' failed: %s", name, outcome)
+                strategy_stats[name] = {"error": str(outcome)}
+                continue
+            pairs = {_pair_key(candidate) for candidate in outcome}
+            pairs.discard(None)
+            merged.update(pairs)
+            strategy_stats[name] = {"pairs_found": len(pairs)}
 
         return {
-            "strategies_run": [name for name, _ in tasks_to_run],
+            "strategies_run": names,
             "strategy_stats": strategy_stats,
-            "total_unique_pairs": len(merged_pairs),
-            "merged_pairs": list(merged_pairs),
+            "total_unique_pairs": len(merged),
+            "merged_pairs": sorted(merged),
         }
 
-    def _run_exact_blocking(self, collection: str, fields: List[str]) -> Dict[str, Any]:
-        from entity_resolution.strategies import CollectBlockingStrategy
-        strategy = CollectBlockingStrategy(
-            db=self.db,
-            collection=collection,
-            blocking_fields=fields,
-        )
-        pairs = strategy.generate_candidates()
-        return {"pairs": [[p[0], p[1]] for p in pairs]}
 
-    def _run_bm25_blocking(self, collection: str, fields: List[str]) -> Dict[str, Any]:
-        from entity_resolution.strategies import BM25BlockingStrategy
-        strategy = BM25BlockingStrategy(
-            db=self.db,
-            collection=collection,
-            search_fields=fields,
-        )
-        pairs = strategy.generate_candidates()
-        return {"pairs": [[p[0], p[1]] for p in pairs]}
-
-    def _sync_similarity(self, blocking_result: Dict[str, Any]) -> Dict[str, Any]:
-        """Run similarity computation synchronously (called from executor)."""
-        from entity_resolution.services.batch_similarity_service import BatchSimilarityService
-        from entity_resolution.services.similarity_edge_service import SimilarityEdgeService
-        from entity_resolution.config.er_config import SimilarityConfig
-
-        sim_cfg: SimilarityConfig = self.config.similarity
-        pairs = blocking_result.get("merged_pairs", [])
-        if not pairs:
-            return {"matches_found": 0, "edges_created": 0}
-
-        sim_service = BatchSimilarityService(
-            db=self.db,
-            collection=self.config.collection_name,
-            fields=self.config.blocking.fields,
-            threshold=sim_cfg.threshold,
-        )
-        matches = sim_service.compute_similarity(pairs)
-
-        edge_service = SimilarityEdgeService(
-            db=self.db,
-            edge_collection=sim_cfg.edge_collection or f"{self.config.collection_name}_similarity_edges",
-        )
-        edge_service.create_edges(matches)
-
-        return {"matches_found": len(matches), "edges_created": len(matches)}
-
-    def _sync_clustering(self) -> Dict[str, Any]:
-        """Run WCC clustering synchronously (called from executor)."""
-        from entity_resolution.services.wcc_clustering_service import WCCClusteringService
-        from entity_resolution.config.er_config import ClusteringConfig
-
-        clust_cfg: ClusteringConfig = self.config.clustering
-        edge_coll = (
-            self.config.similarity.edge_collection
-            or f"{self.config.collection_name}_similarity_edges"
-        )
-        svc = WCCClusteringService(
-            db=self.db,
-            edge_collection=edge_coll,
-            backend=clust_cfg.backend,
-            auto_select_threshold_edges=clust_cfg.auto_select_threshold_edges,
-            sparse_backend_enabled=clust_cfg.sparse_backend_enabled,
-            gae_config=clust_cfg.gae,
-        )
-        clusters = svc.find_clusters()
-
-        return {"clusters_found": len(clusters), "total_entities": sum(len(c) for c in clusters)}
+def _pair_key(candidate: Any) -> Optional[Tuple[str, str]]:
+    """An order-independent key for a candidate pair in any strategy's format."""
+    if isinstance(candidate, dict):
+        a, b = candidate.get("doc1_key"), candidate.get("doc2_key")
+    elif isinstance(candidate, (list, tuple)) and len(candidate) >= 2:
+        a, b = candidate[0], candidate[1]
+    else:
+        return None
+    if a is None or b is None or a == b:
+        return None
+    a, b = str(a), str(b)
+    return (a, b) if a < b else (b, a)

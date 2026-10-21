@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `AsyncERPipeline` could not complete a run: every stage passed arguments its
+  strategy or service does not accept, called a method that does not exist, or
+  read a config attribute that does not exist. It now runs
+  `ConfigurableERPipeline` in the executor and streams its stage events, so an
+  async run returns exactly what a sync run returns. `run_blocking_concurrent()`
+  runs each strategy through `ConfigurableERPipeline.run_blocking()`. Its
+  results now use the sync pipeline's keys (`blocking.candidate_pairs`,
+  `similarity.matches_found`, ...); the old ones were never returned by a run
+  that completed.
+
 ## [3.10.0] - 2026-10-21
 
 ### Added
