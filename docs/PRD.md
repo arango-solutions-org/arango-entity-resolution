@@ -112,6 +112,7 @@ Provide a practical, ArangoDB-native entity-resolution toolkit that supports:
 
 - Precision-first, read-only resolution of one incoming record to an existing canonical entity (`entity_resolution.canonical_hub.SemanticCanonicalHubResolver`): it resolves, abstains, or refuses with a stated reason under an explicit precision, scope and observable-field policy, with embedding, candidate retrieval and verification injected.
 - The ArangoDB candidate provider uses the native vector index only, with no exact or Python fallback.
+- The request-side checks (account scope, deadline, oracle identifiers, observable fields, usable values) are a public, pure function that the resolver itself calls, so a consumer that guards the resolver independently applies the same rules without copying them; the reason vocabulary and oracle-key set are public. Whether an observable field that is present but unusable is ignored or refuses the request is a profile setting.
 
 ### Evaluation and Verifiability
 
@@ -440,4 +441,4 @@ The current product is successful when users can:
 
 ---
 
-**Last Updated:** October 20, 2026
+**Last Updated:** October 21, 2026
