@@ -13,7 +13,7 @@ graph TD
 
     subgraph "Stage 2: Record Blocking (Candidate Generation)"
         Blocking --> ExactBlock[Exact / COLLECT<br/>Email, Phone, ID]
-        Blocking --> BM25Block[BM25 / ArangoSearch<br/>Fuzzy Text — 400x faster]
+        Blocking --> BM25Block[BM25 / ArangoSearch<br/>Token-level fuzzy text]
         Blocking --> VectorBlock[Vector / ANN<br/>Semantic Embeddings]
         Blocking --> GeoBlock[Geographic<br/>Location-Based]
         Blocking --> GraphBlock[Graph Traversal<br/>Relationship Networks]

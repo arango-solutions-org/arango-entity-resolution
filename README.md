@@ -44,7 +44,7 @@ config = ERPipelineConfig.from_yaml("config/er_config.example.yaml")
 pipeline = ConfigurableERPipeline(config=config, db=db)
 results = pipeline.run()
 
-print(f"Candidates: {results['blocking']['candidates_found']}")
+print(f"Candidates: {results['blocking']['candidate_pairs']}")
 print(f"Clusters:   {results['clustering']['clusters_found']}")
 ```
 
@@ -163,14 +163,14 @@ When similarity scoring produces ambiguous pairs (default 0.55–0.80 confidence
 
 | Judge | Accuracy on those pairs | Cost / 1,000 pairs |
 |---|---|---|
-| score threshold alone | 0.563 | — |
-| `ollama/llama3.1:8b` (local) | **0.505** | $0 |
-| `openrouter/google/gemini-3.8-flash` | **0.814** | ~$1.90 |
-| `openrouter/anthropic/claude-opus-5` | **0.821** | ~$11.90 |
+| score threshold alone | 0.565 | — |
+| `ollama/llama3.1:8b` (local) | **0.510** | $0 |
+| `openrouter/google/gemini-3.8-flash` | **0.810** | ~$2.00 |
+| `openrouter/anthropic/claude-opus-5` | **0.820** | ~$11.20 |
 
-Two things follow. A competent model is worth a lot — +0.25 accuracy on exactly the pairs the score cannot settle. And **a small local model is not competent at this**: llama3.1:8b answered "match" for 88% of pairs when 38% were matches, which is worse than the threshold it was meant to improve on. Verify on your own data before trusting a local model here.
+Two things follow. A competent model is worth a lot — +0.25 accuracy on exactly the pairs the score cannot settle. And **a small local model is not competent at this**: llama3.1:8b answered "match" for 87% of pairs when 38% were matches, and scored below the threshold it was meant to improve on (not a significant difference, but no evidence it helps). Verify on your own data before trusting a local model here.
 
-Note also what improves: these models raise accuracy by recovering **recall**. All three *over-merge* — precision is their weakest dimension (0.68 for the two that work). If precision is your constraint, this tier is not the fix.
+Note also what improves: these models raise accuracy by recovering **recall**. All three *over-merge* — precision is their weakest dimension (0.67 and 0.68 for the two that work). If precision is your constraint, this tier is not the fix.
 
 The default 0.55–0.80 band is also narrow. On Amazon-Google it contains only 8.5% of the matcher's errors, so verification there has little to work with; a wider band (0.30–0.95) reaches 61%. Tune it to your score distribution rather than accepting the default.
 
@@ -374,13 +374,20 @@ comparison caveats are in [docs/BENCHMARKS.md](docs/BENCHMARKS.md).
 
 ## Performance
 
-Record blocking reduces quadratic comparisons to linear:
+Blocking turns the quadratic comparison into a short candidate list. Measured on an
+Apple Silicon laptop against single-node ArangoDB 3.12 (detail and method in
+[docs/BENCHMARKS.md](docs/BENCHMARKS.md)):
 
-| Records | Naive Pairs | After Blocking | Time |
-|---------|-------------|----------------|------|
-| 10K | 50M | 500K | ~2s |
-| 100K | 5B | 5M | ~20s |
-| 1M | 500B | 50M | ~3min |
+| Dataset | Records | Possible pairs | Candidate pairs | Blocking | Scoring |
+|---------|---------|----------------|-----------------|----------|---------|
+| Abt-Buy | 2,173 | 1.2M | 10,895 | 1.7s | 0.2s |
+| Amazon-Google | 4,589 | 4.4M | 25,808 | 16.2s | 1.0s |
+| DBLP-ACM | 4,910 | 6.0M | 32,278 | 7.1s | 0.3s |
+| DBLP-Scholar | 66,879 | 168M | 68,057 | 1160s | 0.8s |
+
+Blocking time grows faster than the data: DBLP-Scholar has ~13x the records of
+DBLP-ACM and takes ~140x as long. Throughput beyond these sizes has not been
+measured.
 
 Clustering backends scale from Union-Find (general purpose) through scipy sparse (large dense graphs) to GAE enterprise (millions of edges on dedicated compute).
 

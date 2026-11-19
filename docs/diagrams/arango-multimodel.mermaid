@@ -22,7 +22,7 @@ graph TB
         end
 
         subgraph "Search & Vector (ArangoSearch)"
-            BM25Index[BM25 Index<br/>Fuzzy Text — 400x faster<br/>than Levenshtein blocking]
+            BM25Index[BM25 Index<br/>Token-level fuzzy text<br/>candidate blocking]
             PhoneticIndex[Phonetic Index<br/>Soundex / name variants]
             NgramIndex[N-gram Index<br/>Substring matching]
             VectorANN[Vector ANN Index<br/>Cosine Similarity<br/>Semantic Blocking]

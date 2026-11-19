@@ -104,6 +104,6 @@ arango-er-demo = "entity_resolution.demo:run_presentation_demo"
 arango-er-mcp = "entity_resolution.mcp.server:main"
 
 [project.urls]
-Homepage = "https://github.com/ArthurKeen/arango-entity-resolution"
-Documentation = "https://github.com/ArthurKeen/arango-entity-resolution#readme"
-Issues = "https://github.com/ArthurKeen/arango-entity-resolution/issues"
+Homepage = "https://github.com/arango-solutions-org/arango-entity-resolution"
+Documentation = "https://github.com/arango-solutions-org/arango-entity-resolution#readme"
+Issues = "https://github.com/arango-solutions-org/arango-entity-resolution/issues"
