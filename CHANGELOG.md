@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.1] - 2026-11-19
+
 ### Fixed
 
 - `AsyncERPipeline` could not complete a run: every stage passed arguments its

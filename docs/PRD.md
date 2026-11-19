@@ -7,7 +7,7 @@ This document captures the shipped baseline through `v3.9.0` and the forward-loo
 ## Product Overview
 
 **Product**: ArangoDB Entity Resolution System
-**Current Release**: `3.10.0`
+**Current Release**: `3.10.1`
 **Status**: Published, tested, and production-ready for the currently shipped scope
 
 ### Goal

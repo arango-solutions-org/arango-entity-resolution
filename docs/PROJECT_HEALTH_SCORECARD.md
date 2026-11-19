@@ -1,7 +1,7 @@
 # Project Health Scorecard
 
 **Evaluated:** September 29, 2026  
-**Release baseline:** `v3.10.0`  
+**Release baseline:** `v3.10.1`  
 **Assessment scope:** released code plus committed, gate-passing work on `main`  
 **Overall health:** **7.8/10 — B**
 
