@@ -1,6 +1,6 @@
 # State-of-the-Art and Competitive Scorecard
 
-**Evaluated:** September 29, 2026  
+**Evaluated:** November 19, 2026  
 **Release baseline:** `v3.10.1`  
 **Overall competitive score:** **6.3/10 — differentiated mid-tier contender**
 
@@ -31,9 +31,9 @@ roadmap intent.
 | Graph-context / collective matching | 7% | **5** | OSS niche leader | Shared-neighbor/path evidence and collective fixpoint resolution are wired but opt-in and not proven at Senzing-class maturity or scale |
 | Graph embeddings | 4% | **4** | Prototype | Graph-embedding blocking exists, but the current DeepWalk/count-SVD implementation is bounded and not a production GraphSAGE/GNN path |
 | Enterprise clustering | 6% | **7** | Near parity architecture | GAE WCC plus multiple local backends and automatic selection are strong; default clustering remains WCC-centric |
-| LLM matcher tier | 5% | **7** | Partial parity, now measured | Uncertain-band verification, retries, budgets, and provider abstraction exist and are benchmarked: a competent frontier model is worth +0.25 accuracy on the ambiguous band for ~$4 per dataset, and the cheap tier equals the expensive one. The shipped 0.55–0.80 band still holds only 8.5% of errors; the provider docs now say the local model does not work here. The pipeline previously dropped the structured `llm:` config block and could not enable masking; both are now wired. Precision is the weak side — every model over-merges |
+| LLM matcher tier | 5% | **7** | Partial parity, now measured | Uncertain-band verification, retries, budgets, and provider abstraction exist and are benchmarked: a competent frontier model is worth +0.25 accuracy on the ambiguous band for ~$4 per dataset, and the cheap tier equals the expensive one. The shipped 0.55–0.80 band still holds only 8.5% of errors; the provider docs now say the local model does not work here. The pipeline previously dropped the structured `llm:` config block and could not enable masking; both are now wired. Precision is the weak side — every model over-merges. Held on November 19: the table is now artifact-backed (600 per-pair verdicts, reproduced within 0.005), and the cost budget actually works. Until 780628d the verifier recorded $0 for any model litellm cannot price, including both measured hosted models, so the "budgets" this cell credited were inert for them; cost now comes from the provider's reported charge and an unpriced call stops a budgeted run. The band default is still the open gap |
 | Privacy and governance | 5% | **5** | Behind | Masking is now configurable from the pipeline, reviewer attribution is bound to tokens, and exports are confined to a server-owned directory; all remain optional, and there is no default PII policy, erasure propagation, RBAC, or tenant isolation |
-| Benchmarks and regression evidence | 6% | **8** | Strong | Two public dataset families covering both task shapes, machine-readable artifacts, B-cubed, quality floors, an oracle-bounded LLM tier, and published negative results. The FEBRL and review-band tables are committed artifacts that reproduce to every digit (seeded training) and are test-checked against the docs; a table once had five of nine rows wrong, and a retraction note names the withdrawn figures. Held at 8: the LLM-judge table is not artifact-backed, and two Leipzig tables predate seeding |
+| Benchmarks and regression evidence | 6% | **8** | Strong | Two public dataset families covering both task shapes, machine-readable artifacts, B-cubed, quality floors, an oracle-bounded LLM tier, and published negative results. The FEBRL and review-band tables are committed artifacts that reproduce to every digit (seeded training) and are test-checked against the docs; a table once had five of nine rows wrong, and a retraction note names the withdrawn figures. Held at 8. The LLM-judge table, one of the two reasons, is now artifact-backed and test-checked (November 16 re-run); the other remains: two Leipzig tables predate seeding. Also against it this cycle: BENCHMARKS quoted ~17 and ~19 minutes for the same run (the artifact says 1,160 s), corrected November 19 |
 | Candidate-generation scale | 10% | **6** | Behind | BM25 executes in adaptive chunks sized to a wall-clock budget, verified at 66,879 records against the default client timeout it previously exceeded, with a streaming `iter_candidates()` path available; the batch path still materializes pairs client-side, and nothing above ~67k is evidenced against Splink's 100M+ Spark/Athena claims |
 
 **Weighted total:** 6.3/10, normalized across 102% of stated weights.
@@ -136,7 +136,7 @@ auto-select between the two.
   comparisons. The *rule* for choosing is now measured and documented, but the
   library does not yet apply it for the user.
 - That a local model is adequate for the verification tier. `llama3.1:8b`
-  answered "match" for 88% of ambiguous pairs when 38% were matches — no evidence
+  answered "match" for 87% of ambiguous pairs when 38% were matches — no evidence
   it beats the plain score threshold. Local inference remains the right answer
   where data cannot leave the network, but only after verifying on your own data.
 - That the shipped 0.55–0.80 verification band is suitable as a default. On the

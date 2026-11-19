@@ -1,6 +1,6 @@
 # ArangoDB Entity Resolution
 
-A production-ready entity resolution system for ArangoDB that identifies and links records referring to the same real-world entity across multiple data sources. Uses record blocking, graph algorithms, and AI to scale from thousands to millions of records.
+An entity resolution library for ArangoDB that identifies and links records referring to the same real-world entity across multiple data sources, using record blocking, field-level and probabilistic scoring, graph clustering, and optional LLM verification. Matching quality and speed are measured on public benchmarks up to 66,879 records; see [Benchmark Results](#benchmark-results) and the [scale limits](docs/BENCHMARKS.md#scale-limits).
 
 **Version 3.10.1** | [Changelog](CHANGELOG.md) | [PyPI](https://pypi.org/project/arango-entity-resolution/)
 

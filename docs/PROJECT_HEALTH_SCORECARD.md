@@ -1,6 +1,6 @@
 # Project Health Scorecard
 
-**Evaluated:** September 29, 2026  
+**Evaluated:** November 19, 2026  
 **Release baseline:** `v3.10.1`  
 **Assessment scope:** released code plus committed, gate-passing work on `main`  
 **Overall health:** **7.8/10 — B**
@@ -9,7 +9,23 @@ This is the current operational scorecard. The June 2026 reviews remain useful
 as historical baselines, but their security, matching, UI, and graph-feature
 findings no longer describe the current system.
 
-The September 29 re-evaluation moves the score **up** 0.1, and most of that
+The November 19 re-evaluation holds the score at **7.8**, with one dimension up
+and one down. Matching evidence rose: the LLM-judge table, the one published
+table that was not artifact-backed, was re-measured with every per-pair verdict
+committed and reproduced the September figures to within 0.005 accuracy, and it
+is now test-checked. Documentation and release discipline fell. The README's
+Python quick start raised `KeyError` and its Performance table quoted a
+1M-records figure nobody had measured, both in the README the previous
+evaluation called gated against the code; `docs/BENCHMARKS.md` gave two
+different timings for its own largest run; and `v3.10.1` was tagged on a commit
+whose CI had been red for three pushes. The publish workflow's own test step
+stopped that release, so nothing broken reached PyPI, but the risk this
+scorecard named in September (red CI nobody reads) recurred. Correctness holds:
+five shipped defects were fixed with regressions, including an `AsyncERPipeline`
+that could not complete a run and a cost budget that could never trip for a
+model litellm cannot price, and again a review found them rather than a gate.
+
+The September 29 re-evaluation moved the score **up** 0.1, and most of that
 movement is repair rather than new capability. A whole-repo quality review found,
 and this cycle fixed with mutation-checked regressions, a set of defects the
 previous scorecard had rated without knowing about. Two were exploitable: an
@@ -38,32 +54,34 @@ score is weighted by impact on correctness, trust, and production use.
 | Dimension | Weight | Score | Current evidence |
 |---|---:|---:|---|
 | Architecture and core design | 12% | **9.0** | Config-driven pipeline, pluggable blocking and clustering, shared services behind CLI/MCP/UI, native ArangoDB graph/vector paths |
-| Correctness and reliability | 12% | **8.8** | Binding human verdicts, null-safe scoring, configuration-hashed model loading, strict known-defect and conformance gates, degenerate-fit detection on both EM paths. This cycle fixed ten shipped defects, each with a mutation-checked regression. Among them: missing email/phone scored as disagreement; `compute` and `compute_detailed` diverged; EM accepted non-indicator input; hybrid blocking used near-exact PHRASE retrieval; the cascade treated suppressed edges as links; pipeline statistics reported 0 clustered entities; seeded FS training was not reproducible. Held, not raised: the review found them rather than a gate, and the same class remains (config silently ignores unknown keys; `load_latest` is hashless; `fallback_provider` is unwired) |
-| Tests and mechanical verification | 12% | **8.8** | `make verify`: 1,898 passed, 8 skipped, 75.95% coverage against a 72% floor. New gates this cycle: README config, CLI, tool, backend and strategy tables checked against the objects that define them; published benchmark tables checked against committed artifacts; the secret scanner tested; strict fakes that enforce ArangoDB's naming rule. Up 0.1 because CI now actually runs these gates: it had failed at collection on every run from August 7 until 0b5212a. Held below 9 because the integration tests that prove recall and AQL semantics are not in CI, and nothing watched CI's own health for seven weeks |
+| Correctness and reliability | 12% | **8.8** | Binding human verdicts, null-safe scoring, configuration-hashed model loading, strict known-defect and conformance gates, degenerate-fit detection on both EM paths. This cycle fixed ten shipped defects, each with a mutation-checked regression. Among them: missing email/phone scored as disagreement; `compute` and `compute_detailed` diverged; EM accepted non-indicator input; hybrid blocking used near-exact PHRASE retrieval; the cascade treated suppressed edges as links; pipeline statistics reported 0 clustered entities; seeded FS training was not reproducible. Held, not raised: the review found them rather than a gate, and the same class remains (config silently ignores unknown keys; `load_latest` is hashless). Held again on November 19: five more shipped defects fixed with regressions (`AsyncERPipeline` could not complete a run; golden-record writers used different keys; BM25 silently turned a second `blocking.fields` entry into an exact-match filter; profiler-emitted algorithms did not take effect; `LLMMatchVerifier` recorded $0 for models litellm cannot price, so `max_cost_usd` never tripped, now priced from the provider's charge and failing closed, verified live). `fallback_provider` now warns that nothing acts on it |
+| Tests and mechanical verification | 12% | **8.8** | `make verify`: 1,983 passed, 8 skipped, 76.65% coverage against a 72% floor. New gates this cycle: README config, CLI, tool, backend and strategy tables checked against the objects that define them; published benchmark tables checked against committed artifacts; the secret scanner tested; strict fakes that enforce ArangoDB's naming rule. Up 0.1 because CI now actually runs these gates: it had failed at collection on every run from August 7 until 0b5212a. Held below 9 because the integration tests that prove recall and AQL semantics are not in CI, and nothing watched CI's own health for seven weeks. Held on November 19: the cost-accounting tests now run the real `litellm` pricing path instead of mocking the module, and the LLM and README Performance tables joined the conformance gate; against that, four tests passed locally and failed in CI for three pushes because they depended on the installed pytest and litellm versions, and nothing surfaced the red branch until a release failed |
 | Security and privacy | 12% | **7.4** | Optional API/WebSocket auth and rate limiting, AQL hardening, SPA containment. Fixed this cycle: arbitrary file write and temp-file read through the export routes; reviewer attribution spoofable by header; reviewer tokens unable to authenticate; the API key unscrubbed in provider error text; scanner blind spots over shipped directories; an sdist that shipped untracked worktree files. LLM masking is now configurable from the pipeline. Secure deployment still depends on configuration; the export fix shipped in 3.9.0 |
-| Matching quality and evaluation | 12% | **8.5** | Two public benchmark families covering both task shapes, B-cubed metrics, multi-level Fellegi–Sunter learned end to end, an explicit reference population for `u`, a measurable rule for choosing a scorer, and an oracle-bounded measurement of the LLM tier. Up 0.1: the FEBRL and review-band tables are now committed artifacts that reproduce to every digit and are test-checked against the docs. The LLM-judge table is honestly marked not artifact-backed, and two Leipzig FS tables predate seeding |
-| Steward Workbench and API UX | 10% | **7.3** | Binding edits, audit, threshold tuning, profiling, survivorship overrides, auth UX, and dark mode. Two advertised features never worked and now do: pipeline runs (the reserved `_er_pipeline_runs` name failed ERR 1208 in every database, taking run history and WebSocket progress with it) and export download. Up only 0.1, because MagicMock-based route tests passed throughout, and frontend and enterprise workflow coverage remain thin |
-| Maintainability and debt | 10% | **6.5** | Good layering and deprecation discipline, offset by legacy exports, unwired strategies, oversized modules, 4,059 advisory flake8 findings (flat since August 6), and no clean mypy baseline |
-| Documentation and release discipline | 8% | **8.0** | Gains: the README is now gated against the code, and its main config example, which silently resolved the wrong collection, is fixed. Twenty broken links fixed; fabricated demo figures (99.5% precision, 250K records/s, a 50M-record deployment) replaced with measured ones; Foxx-era docs archived; nine PRD patches proposed. Held, not raised, because of lapses in the same period: CI red for seven weeks while docs said it ran the gates, the published 3.8.0 `[mcp]` extra broken by an unbounded dependency, and the September 22 scorecard grading code with live defects it had not looked for |
+| Matching quality and evaluation | 12% | **8.6** | Two public benchmark families covering both task shapes, B-cubed metrics, multi-level Fellegi–Sunter learned end to end, an explicit reference population for `u`, a measurable rule for choosing a scorer, and an oracle-bounded measurement of the LLM tier. Up 0.1 on September 29: the FEBRL and review-band tables became committed artifacts that reproduce to every digit and are test-checked against the docs. **Up 0.1 again (8.5 → 8.6) on November 19:** the LLM-judge table, the remaining exception, is now backed by all 200 per-pair verdicts per model, reproduced the September figures to within 0.005, and is test-checked; the reconstructed measurement script's abstention bug was found and fixed with tests. Two Leipzig FS tables still predate seeding |
+| Steward Workbench and API UX | 10% | **7.3** | Binding edits, audit, threshold tuning, profiling, survivorship overrides, auth UX, and dark mode. Two advertised features never worked and now do: pipeline runs (the reserved `_er_pipeline_runs` name failed ERR 1208 in every database, taking run history and WebSocket progress with it) and export download. Up only 0.1, because MagicMock-based route tests passed throughout, and frontend and enterprise workflow coverage remain thin. Held on November 19: steward golden-record overrides, claimed implemented and tested, failed to survive a rebuild through the Workbench until ac6bbd8 unified the golden-record key |
+| Maintainability and debt | 10% | **6.5** | Good layering and deprecation discipline, offset by legacy exports, unwired strategies, oversized modules, 4,056 advisory flake8 findings (flat since August 6), and no clean mypy baseline. Held on November 19: `AsyncERPipeline` now wraps the sync pipeline instead of duplicating it, retiring one legacy path |
+| Documentation and release discipline | 8% | **7.8** | Gains: the README is now gated against the code, and its main config example, which silently resolved the wrong collection, is fixed. Twenty broken links fixed; fabricated demo figures (99.5% precision, 250K records/s, a 50M-record deployment) replaced with measured ones; Foxx-era docs archived; nine PRD patches proposed. Held, not raised, because of lapses in the same period: CI red for seven weeks while docs said it ran the gates, the published 3.8.0 `[mcp]` extra broken by an unbounded dependency, and the September 22 scorecard grading code with live defects it had not looked for. **Down 0.2 (8.0 → 7.8) on November 19.** Gains: three releases (3.9.0, 3.10.0, 3.10.1) through the version gate, the remaining PRD patch accepted, the LLM table artifact-backed, the README Performance table gated, a diagram label from the retracted BM25 claim removed. Lapses: the gated README still shipped a Python quick start that raised `KeyError` and an unmeasured "1M records / ~3min" row; the README opened with "production-ready ... millions of records"; BENCHMARKS gave both ~17 and ~19 minutes for one run (the artifact says 1,160 s); and `v3.10.1` was tagged on a red commit, so the published package was built from a later commit (819295d, two test files different) than its tag |
 | Performance and scalability | 7% | **6.5** | GAE and local backend choices are strong; BM25 candidate generation is now adaptively chunked against a wall-clock budget and verified at 66,879 records against the default client timeout it previously exceeded, with a streaming `iter_candidates()` path; strategies still materialise all pairs client-side before deduplication, and nothing above ~67k is evidenced |
 | Operations and deployment | 5% | **5.0** | Health endpoints, migrations, and runtime-provider gates exist, but there is no service image/Kubernetes package or standard Prometheus/OpenTelemetry stack |
 
-**Weighted total:** 7.8/10.
+**Weighted total:** 7.8/10 (7.821).
 
 ## Verification snapshot
 
-- Python correctness gate: **pass** — 1,898 tests passed; critical lint, secret
+- Python correctness gate: **pass** — 1,983 tests passed; critical lint, secret
   scan, version consistency, wiring conformance, docs and published-results
   conformance, statistical quality floors, and the 72% coverage floor all passed
-  on September 29, locally and in CI (first green CI run since July 7: c0bb383).
-- Python coverage: **75.95%**.
-- UI unit tests: **pass** — 7 tests across 3 files.
+  on November 19, locally and in CI on 819295d (CI had been red from a7a16b1 to
+  e306a1e; see risk 8).
+- Python coverage: **76.65%**.
+- UI unit tests: not re-run locally this cycle; the UI contract and Playwright
+  workflows passed in CI on 819295d. Last local count: 7 tests across 3 files.
 - UI production build: **pass**. Vite reports a large main bundle
   (~1.02 MB minified / ~292 KB gzip), so code splitting remains worthwhile.
 - Playwright smoke tests exist and CI installs Chromium. The local rerun was
   environment-blocked because the Playwright browser binary was not installed,
   not because an application assertion failed.
-- Full flake8 remains advisory and currently reports **4,059 findings** (`make
+- Full flake8 remains advisory and currently reports **4,056 findings** (`make
   lint`, line length 120), mostly formatting plus some unused imports — flat
   against August 6, so the debt is stable rather than growing. The blocking
   syntax/undefined-name subset passes.
@@ -112,6 +130,17 @@ Since the August 6 evaluation:
   while leaving peak F1 unchanged), and a degenerate fit is flagged rather than
   returned silently.
 
+Since the September 29 evaluation:
+
+- The LLM verification tier is artifact-backed: all 600 per-pair verdicts from
+  the November 16 re-run are committed, the measurement excludes abstentions and
+  reports McNemar significance, and the cost accounting that recorded $0 for
+  unpriced models now uses the provider's reported charge.
+- The canonical-hub resolver has a public import path and publishes its request
+  checks, oracle keys and reason vocabulary (`check_request`), so consumers stop
+  keeping drifting copies.
+- `AsyncERPipeline` runs the sync pipeline instead of a broken reimplementation.
+
 ## Current risk register
 
 Three risks from the August 6 register are closed. They are listed under
@@ -144,19 +173,27 @@ register can be read as a history rather than only a snapshot.
    config examples, CLI lines, tool, backend and strategy tables, and its
    benchmark tables are now checked against code and committed artifacts, and so
    are the BENCHMARKS FEBRL, summary and oracle tables, the scorecards'
-   internal agreement, and relative links. Still ungated: prose outside the
-   README (guides, demo scripts), the LLM-judge table (its raw rows were lost, and
-   it says so), and the Leipzig TF and multi-level tables, which predate seeded
-   training.
+   internal agreement, and relative links. Since November 19 the LLM-judge
+   table and the README Performance table are gated too. Still ungated: the
+   README's Python quick-start snippet (it raised `KeyError` until a7a16b1, and
+   nothing would have caught it), prose figures in BENCHMARKS outside its tables
+   (it quoted ~17 and ~19 minutes for one run), prose outside the README (guides,
+   demo scripts, which still say "millions of records"), and the Leipzig TF and
+   multi-level tables, which predate seeded training.
 7. **Verification-tier defaults — P2 product constraint.** The LLM tier works
    with a competent model, and the provider docs now say that the local model
    does not. The shipped 0.55–0.80 band still holds only 8.5% of errors; derive
    it from the error distribution (PRD requirement REQ-L05, open drift alert).
    `fallback_provider` left the shipped scope; the config still parses it and
-   warns that it has no effect.
-8. **CI health is unmonitored — P1 process constraint.** The Python CI workflow
+   warns that it has no effect. Cost budgets now work for every model: a call
+   nobody can price is reported as unknown and stops a `max_cost_usd` run.
+8. **CI health is unmonitored — P1 process constraint, recurred.** The Python CI workflow
    failed on every run for seven weeks, and nobody noticed, because a gate that
-   is always red is not read. Add a check that surfaces a red default branch at
+   is always red is not read. It recurred on November 18-19: four tests passed in
+   the development venv (pytest 9.0.3, litellm 1.86.2) and failed in CI (9.2.0,
+   1.110.1) for three pushes, and `v3.10.1` was tagged on one of them; only the
+   publish workflow's test step stopped the release. Check CI on the release
+   commit before tagging. Add a check that surfaces a red default branch at
    session start, and run the integration tests in CI against an ArangoDB
    service container. They currently prove recall and AQL semantics locally
    only.
@@ -164,6 +201,14 @@ register can be read as a history rather than only a snapshot.
    drops unknown keys without a word, so a misspelt key runs the default. This is
    how the README's main example resolved the wrong collection. Warn on or reject
    unknown keys.
+
+### Closed since September 29
+
+- **LLM-judge table not artifact-backed.** Re-measured on November 16 with every
+  per-pair verdict committed, reproduced within 0.005, and test-checked.
+- **Cost budgets inert for unpriced models.** Fixed in 780628d with tests on the
+  real pricing path, and verified with one live OpenRouter call.
+- **`AsyncERPipeline` unusable.** Fixed in a49f42d by wrapping the sync pipeline.
 
 ### Closed since September 22
 
@@ -208,9 +253,19 @@ imports from the installed package.
 (issue #4). The deprecated `_wp13` import paths it was to remove stay until
 3.11.0, because a known consumer has not yet migrated.
 
+**3.10.1 followed on 2026-11-19**, a fix release (cost accounting, async
+pipeline, README). Its first publish failed at the workflow's test step, because
+CI on `main` had been red since a7a16b1 on dependency-version-sensitive tests.
+They were fixed in 819295d, CI went green on Python 3.10-3.12, and the package
+was published from 819295d by workflow dispatch. The `v3.10.1` tag points at
+e306a1e, which differs only in those two test files; it was left in place rather
+than moved after publication.
+
 The fourteen PRD patches proposed through 3.9.0 were accepted and applied on
-2026-10-20. One more, describing the shared checks, is proposed in the untracked
-`.prd-patches-pending.md`.
+2026-10-20, and the shared-checks patch (REQ-CANONICAL-HUB-CHECKS) on 2026-10-21.
+One PRD line is now known stale: PRD.md:277 quotes "~17 minutes" for the
+DBLP-Scholar run whose artifact records 1,160 s; a patch is proposed rather than
+an edit.
 
 ## Evidence
 
