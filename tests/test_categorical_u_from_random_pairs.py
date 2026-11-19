@@ -75,9 +75,12 @@ def test_unobserved_fields_do_not_inflate_the_fallback_level():
     observed_only = [{"name": 0.95}] * 5 + [{"name": 0.1}] * 5
     with_missing = observed_only + [{"name": None}] * 50 + [{}] * 50
 
-    assert categorical_u_from_comparisons(
-        with_missing, LEVELS, FIELDS
-    ) == pytest.approx(categorical_u_from_comparisons(observed_only, LEVELS, FIELDS))
+    got = categorical_u_from_comparisons(with_missing, LEVELS, FIELDS)
+    want = categorical_u_from_comparisons(observed_only, LEVELS, FIELDS)
+    # Per field: pytest >= 9.2 refuses approx() over a dict of lists.
+    assert got.keys() == want.keys()
+    for field in want:
+        assert got[field] == pytest.approx(want[field])
 
 
 def test_every_level_keeps_positive_mass_so_no_weight_is_infinite():

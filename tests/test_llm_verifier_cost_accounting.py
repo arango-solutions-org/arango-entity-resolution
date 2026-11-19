@@ -30,7 +30,10 @@ from entity_resolution.reasoning.llm_verifier import LLMMatchVerifier
 
 pytestmark = pytest.mark.unit
 
-UNPRICED_MODEL = "openrouter/anthropic/claude-opus-5"
+# A name no price map will ever list. claude-opus-5 was used here first and was
+# unmapped in litellm 1.86.2, but 1.110 added it, so a real model name makes
+# these tests depend on which litellm the environment happened to install.
+UNPRICED_MODEL = "openrouter/example-vendor/unpriced-test-model"
 LOCAL_MODEL = "ollama/llama3.1:8b"
 USAGE = {"prompt_tokens": 1600, "completion_tokens": 120, "total_tokens": 1720}
 
