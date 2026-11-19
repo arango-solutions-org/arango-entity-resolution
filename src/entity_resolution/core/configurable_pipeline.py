@@ -126,7 +126,6 @@ class ConfigurableERPipeline:
             Results dictionary with metrics for each phase:
             {
                 'blocking': {
-                    'blocks_found': int,
                     'candidate_pairs': int,
                     'runtime_seconds': float
                 },

@@ -338,7 +338,7 @@ python3 industry_scenarios.py
 **Key Talking Points**:
 - "312% ROI in year one for small companies"
 - "Payback in 3-9 months"
-- "Scales to millions of records"
+- "Measured on public benchmarks up to 66,879 records; larger scale is on the roadmap" (see docs/BENCHMARKS.md#scale-limits)
 
 ### Database Inspection During Demo
 
@@ -590,7 +590,7 @@ We built a comprehensive presentation system with:
 2. **No External Dependencies**: No Elasticsearch or separate graph database needed
 3. **Performance**: 5-6x faster than Python-only approach
 4. **Simplicity**: Single platform reduces complexity and cost
-5. **Scalability**: Linear scaling to millions of records
+5. **Scalability**: Measured to 66,879 records (blocking ~19 minutes on a laptop); larger runs are not yet evidenced (docs/BENCHMARKS.md#scale-limits)
 
 ---
 

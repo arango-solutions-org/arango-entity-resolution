@@ -274,7 +274,7 @@ previously failed outright. Chunked and unchunked runs are asserted to produce
 identical candidate sets, and the query sorts by `_key` before `LIMIT` so chunks
 cannot overlap or skip documents.
 
-Throughput is still modest: ~17 minutes for 66,879 records against ~7 seconds
+Throughput is still modest: ~19 minutes (1,160 s) for 66,879 records against ~7 seconds
 for 4,910. Candidate pairs are also still materialised in client memory before
 deduplication, though `iter_candidates()` offers a streaming path. The README's
 1M-records figure remains unsubstantiated and claims above roughly 50k records

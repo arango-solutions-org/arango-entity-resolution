@@ -98,6 +98,45 @@ def _readme_section(start: str, end: str) -> str:
     return README.split(start, 1)[1].split(end, 1)[0]
 
 
+def _readme_python_result_paths() -> list:
+    """Every ``results[...][...]`` lookup in the README's Python quick start."""
+    section = _readme_section("### Python", "### MCP Server")
+    code = "".join(re.findall(r"```python\n(.*?)```", section, re.S))
+    return [
+        tuple(re.findall(r"\[['\"]([A-Za-z_]+)['\"]\]", chain))
+        for chain in re.findall(r"results((?:\[['\"][A-Za-z_]+['\"]\])+)", code)
+    ]
+
+
+def test_readme_python_quickstart_reads_keys_a_real_run_returns() -> None:
+    """The quick start printed results['blocking']['candidates_found'] until
+    a7a16b1, a key run() has never returned, so the first thing a reader ran
+    raised KeyError. The docstring was no guide either: it still lists a
+    'blocks_found' key that run() does not produce. So this runs the real
+    pipeline, on the README's own config, against the strict database fake
+    (the wire is the only thing faked) and looks each documented key up."""
+    from test_wiring_conformance import FakeDatabase
+
+    from entity_resolution import ConfigurableERPipeline
+
+    paths = _readme_python_result_paths()
+    assert paths, "the README Python quick start should read at least one result key"
+
+    full = [b for b in _YAML_BLOCKS if "entity_type:" in b and "clustering:" in b]
+    assert full, "the README should carry a full pipeline config to run"
+    config = ERPipelineConfig.from_dict(yaml.safe_load(full[0]))
+    results = ConfigurableERPipeline(db=FakeDatabase(), config=config).run()
+
+    for path in paths:
+        node = results
+        for key in path:
+            assert isinstance(node, dict) and key in node, (
+                f"README reads results{''.join(f'[{k!r}]' for k in path)}, "
+                f"but run() returns no {key!r} there"
+            )
+            node = node[key]
+
+
 def _registered_mcp_tools() -> set:
     pytest.importorskip("mcp")
     from entity_resolution.mcp import server

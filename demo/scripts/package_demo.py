@@ -484,8 +484,8 @@ python3 industry_scenarios.py
 
 - **ArangoDB's unique FTS+Graph** capabilities in one platform
 - **99%+ fewer comparisons** via blocking
-- **Real-time processing** for live applications
-- **Enterprise scalability** to millions of records
+- **Incremental resolution** of single records against what is already stored
+- **Measured scale** up to 66,879 records (see docs/BENCHMARKS.md#scale-limits)
 
 ## Support
 
