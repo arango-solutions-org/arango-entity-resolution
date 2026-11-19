@@ -44,6 +44,20 @@ _DEFAULT_MAX_RESPONSE_TOKENS = 1024
 #: confidence + even a one-clause reason needs roughly this much.
 _MIN_RESPONSE_TOKENS = 64
 
+#: Where litellm stores the charge a provider reported for a call. OpenRouter
+#: returns it in ``usage.cost``; litellm requests it and copies it here, but its
+#: own ``completion_cost`` ignores it and prices from a model map instead, which
+#: has no entry for many routed models.
+_PROVIDER_COST_KEY = "llm_provider-x-litellm-response-cost"
+
+
+def _as_cost(value: Any) -> Optional[float]:
+    """A real number of dollars, or None. Anything else is not a price."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value)
+
+
 # Tolerant of empty/nested/`json`-tagged fenced blocks (the old split("```")[1]
 # crashed on a single or empty fence).
 _FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL)
@@ -137,6 +151,7 @@ class LLMMatchVerifier:
             "tokens_in": 0,
             "tokens_out": 0,
             "cost_usd": 0.0,
+            "unpriced_calls": 0,
             "parse_failures": 0,
             "budget_stops": 0,
         }
@@ -219,15 +234,31 @@ class LLMMatchVerifier:
         return self.low_threshold <= score < self.high_threshold
 
     def stats(self) -> Dict[str, Any]:
-        """Cumulative LLM usage: calls, tokens, cost (USD), parse/budget stops."""
-        return dict(self._stats)
+        """Cumulative LLM usage: calls, tokens, cost (USD), parse/budget stops.
+
+        ``cost_usd`` is None once any call could not be priced, because a sum
+        that leaves calls out would read as the whole spend. ``cost_usd_known``
+        is what was priced and ``unpriced_calls`` how many calls were not.
+        """
+        stats = dict(self._stats)
+        stats["cost_usd_known"] = stats["cost_usd"]
+        if stats["unpriced_calls"]:
+            stats["cost_usd"] = None
+        return stats
 
     def budget_exceeded(self) -> bool:
-        """True once the per-run call or cost budget is reached."""
+        """True once the per-run call or cost budget is reached.
+
+        A cost budget fails closed: once a call could not be priced, the spend
+        is unknown and the budget counts as reached.
+        """
         if self.max_calls is not None and self._stats["calls"] >= self.max_calls:
             return True
-        if self.max_cost_usd is not None and self._stats["cost_usd"] >= self.max_cost_usd:
-            return True
+        if self.max_cost_usd is not None:
+            if self._stats["unpriced_calls"]:
+                return True
+            if self._stats["cost_usd"] >= self.max_cost_usd:
+                return True
         return False
 
     def estimate_cost(self, num_pairs: int, avg_total_tokens: int = 400) -> Dict[str, Any]:
@@ -454,12 +485,41 @@ class LLMMatchVerifier:
                 self._stats["tokens_out"] += int(getattr(usage, "completion_tokens", 0) or 0)
         except (TypeError, ValueError):
             pass
+        cost = self._price(response)
+        if cost is not None:
+            self._stats["cost_usd"] += cost
+            return
+        self._stats["unpriced_calls"] += 1
+        if self._stats["unpriced_calls"] == 1:
+            logger.warning(
+                "No price for %s: neither the provider nor litellm reported what "
+                "the call cost, so this run's LLM spend is unknown%s.",
+                self.model,
+                " and max_cost_usd stops further calls" if self.max_cost_usd is not None else "",
+            )
+
+    @staticmethod
+    def _price(response: Any) -> Optional[float]:
+        """What one call cost in USD, or None if nobody can say.
+
+        The provider's own charge comes first, since it is what was billed;
+        litellm's model map is the fallback.
+        """
+        hidden = getattr(response, "_hidden_params", None)
+        if isinstance(hidden, dict):
+            headers = hidden.get("additional_headers")
+            if isinstance(headers, dict):
+                cost = _as_cost(headers.get(_PROVIDER_COST_KEY))
+                if cost is not None:
+                    return cost
+        cost = _as_cost(getattr(getattr(response, "usage", None), "cost", None))
+        if cost is not None:
+            return cost
         try:
-            cost = litellm.completion_cost(completion_response=response)
-            self._stats["cost_usd"] += float(cost)
+            return _as_cost(litellm.completion_cost(completion_response=response))
         except Exception:
-            # Pricing unknown for this model/provider, or a mocked response.
-            pass
+            # litellm raises for a model missing from its price map.
+            return None
 
     @staticmethod
     def _parse_verdict(raw: str) -> Optional[Dict[str, Any]]:

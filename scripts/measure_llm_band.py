@@ -164,7 +164,7 @@ def main() -> int:
         "best_threshold": thr,
         **summarize(rows, thr),
         "median_seconds": round(statistics.median(r["seconds"] for r in rows), 3) if rows else None,
-        "provider_stats": {k: stats.get(k) for k in ("calls", "tokens_in", "tokens_out", "cost_usd", "parse_failures")},
+        "provider_stats": {k: stats.get(k) for k in ("calls", "tokens_in", "tokens_out", "cost_usd", "cost_usd_known", "unpriced_calls", "parse_failures")},
         "rows": rows,
     }
     print(json.dumps({k: v for k, v in result.items() if k != "rows"}, indent=2))

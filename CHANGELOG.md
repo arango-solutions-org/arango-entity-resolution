@@ -30,16 +30,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The LLM-judge table in `docs/BENCHMARKS.md` is re-measured with every per-pair
   verdict committed (`docs/benchmark_results_llm_band_*.json`) and is now checked
   against those files, as is the README Performance table.
-
-### Known issues
-
-- `LLMMatchVerifier` records $0 for a model litellm cannot price (including
-  gemini-3.8-flash and claude-opus-5 through OpenRouter), so `stats()` reports
-  paid calls as free and `max_cost_usd` never trips for those models. Pinned in
-  `tests/test_llm_verifier_cost_accounting.py`.
+- `LLMMatchVerifier` recorded $0 for a model litellm cannot price (including
+  gemini-3.8-flash and claude-opus-5 through OpenRouter), so `stats()` reported
+  paid calls as free and `max_cost_usd` never tripped. It now uses the charge the
+  provider reports, then litellm's price map. A call neither can price is
+  counted in the new `unpriced_calls` stat, and `cost_usd` becomes `None`
+  (`cost_usd_known` holds what was priced).
 
 ### Changed
 
+- A `max_cost_usd` budget now fails closed: once a call cannot be priced, the
+  run's spend is unknown, so the verifier stops calling the LLM and routes the
+  remaining uncertain pairs to review. Models litellm prices at $0 (local
+  Ollama models) are unaffected. Without a cost budget nothing changes except
+  the reported stats.
 - Setting `LLMProviderConfig.fallback_provider` now raises a `UserWarning`. The
   field was always parsed and validated, but nothing reads it: a failed LLM call
   is not retried against another provider. Configs that set it still load.

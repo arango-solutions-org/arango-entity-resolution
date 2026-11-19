@@ -185,9 +185,10 @@ python scripts/measure_llm_band.py --dataset amazon-google \
 | oracle | 1.000 | +0.435 | — | — | — | — |
 
 Accuracy, abstentions, significance and latency come straight from the
-artifacts. **Cost does not**: the verifier recorded $0 for both hosted models,
-because litellm has no price for them and the verifier swallows the pricing
-error (see the defect note below). The $/pair column is each artifact's token
+artifacts. **Cost does not**: the verifier that produced them recorded $0 for
+both hosted models, because litellm has no price for them and the verifier
+swallowed the pricing error (see the defect note below; it is fixed, so a re-run
+records OpenRouter's own charge). The $/pair column is each artifact's token
 counts multiplied by OpenRouter's list prices on the day of the run ($0.825 /
 $4.125 per million input/output tokens for gemini, $5 / $25 for Opus), which
 totals $2.66 against an account spend of $2.61 over the same window.
@@ -236,10 +237,13 @@ The November re-run exposed two more. The reconstructed script counted a reply
 the verifier could not parse as a "no_match" verdict, crediting the model with
 every non-matching pair it failed to answer; it now counts it as an abstention,
 as the original measurement did (`tests/test_measure_llm_band.py`). And the
-verifier's cost accounting reads prices from litellm's model map, so for a model
-that map does not list it records $0 without a warning. That also means
-`max_cost_usd` can never trip for such a model. This is pinned as a known defect
-in `tests/test_llm_verifier_cost_accounting.py`.
+verifier's cost accounting read prices only from litellm's model map, so for a
+model that map does not list it recorded $0 without a warning, and
+`max_cost_usd` could never trip for such a model. It now takes the charge the
+provider reports (OpenRouter returns one with every response), falls back to
+litellm's map, and otherwise reports the cost as unknown (`cost_usd: None`,
+counted in `unpriced_calls`), which makes a cost budget stop further calls
+(`tests/test_llm_verifier_cost_accounting.py`).
 
 ## Blocking: which field to search
 
