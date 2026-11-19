@@ -160,52 +160,62 @@ python scripts/measure_review_band.py --dataset amazon-google \
 `LLMMatchVerifier` — its prompt, its parsing, its fallbacks — not a bespoke
 harness.
 
-> **This table is not artifact-backed.** It was measured on September 19–21,
-> 2026 with a script that lived outside the repository, and the per-pair verdicts
-> were written to a temporary directory that has since been cleared. The script
-> is now committed as `scripts/measure_llm_band.py` (reconstructed from the
-> session that ran it, and smoke-tested against a local model). A re-run writes
-> the per-pair rows to JSON, but it sends record content to the provider and
-> costs about $0.40 (gemini-3.8-flash) or $2.40 (claude-opus-5) per 200 pairs,
-> so it is not run automatically:
->
-> ```bash
-> python scripts/measure_llm_band.py --dataset amazon-google \
->   --port 8529 --password "$ARANGO_ROOT_PASSWORD" \
->   --model openrouter/google/gemini-3.8-flash --band 0.30,0.95 --sample 200 \
->   --output docs/benchmark_results_llm_band_gemini.json
-> ```
+Every row below is backed by a committed artifact holding all 200 per-pair
+verdicts, re-measured on November 16, 2026 against a disposable ArangoDB 3.12
+container. The figures first published here (September 19–21) came from a
+script outside the repository whose verdicts were lost; the re-run reproduced
+them to within 0.005 accuracy. The run sends record content to the provider and
+costs about $2.66 for both hosted models, so it is not run automatically:
+
+```bash
+python scripts/measure_llm_band.py --dataset amazon-google \
+  --port <disposable-db-port> --password "$ARANGO_TEST_PASSWORD" \
+  --model openrouter/google/gemini-3.8-flash --band 0.30,0.95 --sample 200 \
+  --output docs/benchmark_results_llm_band_gemini.json
+# likewise --model ollama/llama3.1:8b (…_llama.json)
+# and --model openrouter/anthropic/claude-opus-5 (…_opus.json)
+```
 
 | Judge | Accuracy | vs threshold | Significant? | Abstained | $/pair | Median latency |
 |---|---|---|---|---|---|---|
-| score threshold alone | 0.5628 | — | — | — | $0 | — |
-| `llama3.1:8b` (local) | 0.5050 | −0.060 | no (McNemar p=0.16) | 0% | $0 | 1.7s |
-| `gemini-3.8-flash` | **0.8141** | **+0.2513** | yes (p<0.0001) | 0.5% | $0.0019 | 3.2s |
-| `claude-opus-5` | **0.8205** | **+0.2513** | yes (p<0.0001) | 2.5% | $0.0119 | 3.1s |
-| oracle | 1.0000 | +0.437 | — | — | — | — |
+| score threshold alone | 0.565 | — | — | — | $0 | — |
+| `llama3.1:8b` (local) | 0.510 | −0.055 | no (McNemar p=0.20) | 0% | $0 | 1.6s |
+| `gemini-3.8-flash` | **0.810** | **+0.245** | yes (p<0.0001) | 0% | $0.0020 | 3.5s |
+| `claude-opus-5` | **0.820** | **+0.255** | yes (p<0.0001) | 0% | $0.0112 | 2.5s |
+| oracle | 1.000 | +0.435 | — | — | — | — |
 
-**The cheap frontier model equals the expensive one** — 0.8141 against 0.8205,
-identical deltas. Opus costs 6x more for nothing measurable. Over the full
-1,932-pair band that is **$3.70 against $23.01**.
+Accuracy, abstentions, significance and latency come straight from the
+artifacts. **Cost does not**: the verifier recorded $0 for both hosted models,
+because litellm has no price for them and the verifier swallows the pricing
+error (see the defect note below). The $/pair column is each artifact's token
+counts multiplied by OpenRouter's list prices on the day of the run ($0.825 /
+$4.125 per million input/output tokens for gemini, $5 / $25 for Opus), which
+totals $2.66 against an account spend of $2.61 over the same window.
+
+**The cheap frontier model nearly equals the expensive one**: 0.810 against
+0.820, a difference well inside sampling noise on 200 pairs. Opus costs 5.5x
+more for nothing measurable. Over the full 1,932-pair band that is **$3.93
+against $21.73**.
 
 **A small local model is not merely weaker, it is unusable here.** llama3.1:8b
-answered "match" for 88% of pairs when 38% were matches: recall 1.000, precision
-0.434. It essentially never says no. The accuracy gap against the plain threshold
-is *not* statistically significant (p=0.16), so the honest claim is "no evidence
+answered "match" for 87% of pairs when 38% were matches: recall 1.000, precision
+0.437. It essentially never says no. The accuracy gap against the plain threshold
+is *not* statistically significant (p=0.20), so the honest claim is "no evidence
 it helps" rather than "it is worse" — but there is certainly no case for shipping
 it.
 
 **Confidence gating does not rescue it.** The usual mitigation is to override the
-score only when the model is confident. llama's confidence came back at 0.7–0.8
-for almost everything, including all 99 false positives; above a 0.83 cutoff it
-touches 7 of 200 pairs. A signal that does not vary cannot be thresholded. The
-two frontier models spread their confidence far wider (19 distinct values for
-Opus against 4 for llama) — though note gemini matched Opus's accuracy with a
-*narrower* spread, so confidence range alone does not predict performance.
+score only when the model is confident. llama's confidence came back between 0.7
+and 0.8 for 195 of 200 pairs, and its 98 false positives all sit between 0.7 and
+0.9; above a 0.83 cutoff it touches 3 of 200 pairs. A signal that does not vary
+cannot be thresholded. Opus spreads its confidence far wider (26 distinct values
+against 4 for llama), but gemini matched Opus's accuracy with 7, so confidence
+range alone does not predict performance.
 
 **What improves is recall, not precision.** All three judges over-merge. Opus
-says "match" on 56% of pairs where truth is 39%; precision 0.688 against recall
-0.987. If precision is the binding constraint, this tier is the wrong instrument.
+says "match" on 55% of pairs where truth is 38%; precision 0.682 against recall
+0.987 (gemini: 0.673 and 0.974). If precision is the binding constraint, this
+tier is the wrong instrument.
 
 Extrapolating the observed accuracy linearly onto the oracle's +0.2476 puts a
 frontier model at roughly **+0.14 F1** on this dataset, for under $4 — the
@@ -221,6 +231,15 @@ models barely triggered it (Opus lost 5, llama none), so it was invisible until 
 verbose model was tried — and any measurement taken through one was silently
 computed on whichever subset happened to answer briefly. Fixed in `908b108`;
 the budget is now `max_response_tokens`, defaulting to 1024.
+
+The November re-run exposed two more. The reconstructed script counted a reply
+the verifier could not parse as a "no_match" verdict, crediting the model with
+every non-matching pair it failed to answer; it now counts it as an abstention,
+as the original measurement did (`tests/test_measure_llm_band.py`). And the
+verifier's cost accounting reads prices from litellm's model map, so for a model
+that map does not list it records $0 without a warning. That also means
+`max_cost_usd` can never trip for such a model. This is pinned as a known defect
+in `tests/test_llm_verifier_cost_accounting.py`.
 
 ## Blocking: which field to search
 
@@ -694,9 +713,10 @@ documents and silently lose pairs.
 What remains: every strategy still materialises all candidate pairs into client
 memory before deduplication, so peak memory scales with the candidate count.
 `iter_candidates()` exposes a streaming path for callers that want to avoid it.
-The README's "1M records / ~3min" is still **not** substantiated — 67k takes ~17
-minutes — and published throughput at 100M+ records (as Splink-on-Spark and
-Senzing report) remains an open gap.
+The README once claimed "1M records / ~3min", which was never measured; it now
+quotes the four measured rows from the Summary table instead (67k takes ~17
+minutes). Published throughput at 100M+ records (as Splink-on-Spark and Senzing
+report) remains an open gap.
 
 ## What these benchmarks already caught
 

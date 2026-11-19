@@ -18,6 +18,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   results now use the sync pipeline's keys (`blocking.candidate_pairs`,
   `similarity.matches_found`, ...); the old ones were never returned by a run
   that completed.
+- The README quick start read `results['blocking']['candidates_found']`, which
+  `run()` never returns, so it raised `KeyError`; it now reads `candidate_pairs`.
+  The README's Performance table claimed 1M records in ~3 minutes, which was never
+  measured; it now quotes the four measured benchmark rows. Two architecture
+  diagrams dropped a "400x faster than Levenshtein" label from the phrase-match
+  defect. The PyPI project URLs now point at arango-solutions-org.
+- `scripts/measure_llm_band.py` counted an LLM reply it could not parse as a
+  "no_match" verdict, crediting the model with every non-matching pair it failed
+  to answer. It now counts it as an abstention and reports McNemar significance.
+- The LLM-judge table in `docs/BENCHMARKS.md` is re-measured with every per-pair
+  verdict committed (`docs/benchmark_results_llm_band_*.json`) and is now checked
+  against those files, as is the README Performance table.
+
+### Known issues
+
+- `LLMMatchVerifier` records $0 for a model litellm cannot price (including
+  gemini-3.8-flash and claude-opus-5 through OpenRouter), so `stats()` reports
+  paid calls as free and `max_cost_usd` never trips for those models. Pinned in
+  `tests/test_llm_verifier_cost_accounting.py`.
 
 ### Changed
 

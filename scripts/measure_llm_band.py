@@ -35,6 +35,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import math
 import random
 import statistics
 import sys
@@ -61,6 +62,46 @@ def _extra_args(argv):
     ap.add_argument("--sample-seed", type=int, default=20260919)
     ap.add_argument("--entity-type", default="product")
     return ap.parse_known_args(argv)
+
+
+def _mcnemar_p(b: int, c: int) -> float | None:
+    """Exact two-sided McNemar p-value from the two discordant counts."""
+    n = b + c
+    if n == 0:
+        return None
+    tail = sum(math.comb(n, k) for k in range(min(b, c) + 1)) / 2 ** n
+    return round(min(1.0, 2 * tail), 4)
+
+
+def summarize(rows, threshold):
+    """Score the judge against the threshold on the pairs the model answered.
+
+    A reply the verifier could not parse comes back as decision "error" with
+    llm_called=True. It is an abstention, not a "no_match": counting it would
+    credit the model with every non-matching pair it failed to answer. Both
+    accuracies are computed on the same answered pairs so they stay comparable.
+    """
+    answered = [r for r in rows if r["llm_called"] and r["llm_decision"] in ("match", "no_match")]
+    abstained = sum(1 for r in rows if r["llm_called"]) - len(answered)
+
+    def _acc(pred):
+        return round(sum(pred(r) == r["truth"] for r in answered) / len(answered), 4) if answered else None
+
+    llm_right = [(r["llm_decision"] == "match") == r["truth"] for r in answered]
+    thr_right = [(r["score"] >= threshold) == r["truth"] for r in answered]
+    b = sum(1 for m, t in zip(llm_right, thr_right) if m and not t)
+    c = sum(1 for m, t in zip(llm_right, thr_right) if t and not m)
+    return {
+        "judged_by_model": len(answered),
+        "abstained": abstained,
+        "fallbacks": len(rows) - sum(1 for r in rows if r["llm_called"]),
+        "accuracy": {
+            "llm": _acc(lambda r: r["llm_decision"] == "match"),
+            "score_threshold": _acc(lambda r: r["score"] >= threshold),
+            "always_match": _acc(lambda r: True),
+        },
+        "mcnemar": {"llm_only_right": b, "threshold_only_right": c, "p": _mcnemar_p(b, c)},
+    }
 
 
 def main() -> int:
@@ -116,22 +157,12 @@ def main() -> int:
         if i % 25 == 0 or i == len(sample):
             print(f"  {i}/{len(sample)}", flush=True)
 
-    called = [r for r in rows if r["llm_called"]]
-
-    def _acc(pred):
-        return round(sum(pred(r) == r["truth"] for r in called) / len(called), 4) if called else None
-
     stats = verifier.stats()
     result = {
         "dataset": args.dataset, "model": extra.model, "band": [lo, hi],
         "band_pairs": len(band), "sampled": len(sample), "sample_seed": extra.sample_seed,
         "best_threshold": thr,
-        "judged_by_model": len(called), "fallbacks": len(rows) - len(called),
-        "accuracy": {
-            "llm": _acc(lambda r: r["llm_decision"] == "match"),
-            "score_threshold": _acc(lambda r: r["score"] >= thr),
-            "always_match": _acc(lambda r: True),
-        },
+        **summarize(rows, thr),
         "median_seconds": round(statistics.median(r["seconds"] for r in rows), 3) if rows else None,
         "provider_stats": {k: stats.get(k) for k in ("calls", "tokens_in", "tokens_out", "cost_usd", "parse_failures")},
         "rows": rows,

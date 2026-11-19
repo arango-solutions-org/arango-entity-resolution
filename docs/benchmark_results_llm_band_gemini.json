@@ -1,0 +1,2435 @@
+{
+  "dataset": "amazon-google",
+  "model": "openrouter/google/gemini-3.8-flash",
+  "band": [
+    0.3,
+    0.95
+  ],
+  "band_pairs": 1932,
+  "sampled": 200,
+  "sample_seed": 20260919,
+  "best_threshold": 0.34,
+  "judged_by_model": 200,
+  "abstained": 0,
+  "fallbacks": 0,
+  "accuracy": {
+    "llm": 0.81,
+    "score_threshold": 0.565,
+    "always_match": 0.38
+  },
+  "mcnemar": {
+    "llm_only_right": 60,
+    "threshold_only_right": 11,
+    "p": 0.0
+  },
+  "median_seconds": 3.521,
+  "provider_stats": {
+    "calls": 201,
+    "tokens_in": 223778,
+    "tokens_out": 53775,
+    "cost_usd": 0.0,
+    "parse_failures": 0
+  },
+  "rows": [
+    {
+      "pair": [
+        "a_b000hlt4y0",
+        "b_http___www.google.com_base_feeds_snippets_18368153783802816439"
+      ],
+      "score": 0.7229,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 3.27
+    },
+    {
+      "pair": [
+        "a_b0001ghg64",
+        "b_http___www.google.com_base_feeds_snippets_17878975434909198145"
+      ],
+      "score": 0.6,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.479
+    },
+    {
+      "pair": [
+        "a_b000nlwxii",
+        "b_http___www.google.com_base_feeds_snippets_16778737466501327415"
+      ],
+      "score": 0.3333,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.742
+    },
+    {
+      "pair": [
+        "a_b000bnb72g",
+        "b_http___www.google.com_base_feeds_snippets_17010841797296818807"
+      ],
+      "score": 0.9,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.259
+    },
+    {
+      "pair": [
+        "a_b00024wjrq",
+        "b_http___www.google.com_base_feeds_snippets_16744224390148606478"
+      ],
+      "score": 0.4441,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 6.724
+    },
+    {
+      "pair": [
+        "a_b000ndibwi",
+        "b_http___www.google.com_base_feeds_snippets_18195626752396679157"
+      ],
+      "score": 0.496,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 4.076
+    },
+    {
+      "pair": [
+        "a_b000icpfmi",
+        "b_http___www.google.com_base_feeds_snippets_11143055459495586546"
+      ],
+      "score": 0.3572,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.175
+    },
+    {
+      "pair": [
+        "a_b000m2yc32",
+        "b_http___www.google.com_base_feeds_snippets_18387089293641326632"
+      ],
+      "score": 0.3123,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 2.408
+    },
+    {
+      "pair": [
+        "a_b000o27t8a",
+        "b_http___www.google.com_base_feeds_snippets_18406867413031084183"
+      ],
+      "score": 0.4943,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.201
+    },
+    {
+      "pair": [
+        "a_b000ndibge",
+        "b_http___www.google.com_base_feeds_snippets_15289985273321283103"
+      ],
+      "score": 0.3652,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.32
+    },
+    {
+      "pair": [
+        "a_b000bgtvbc",
+        "b_http___www.google.com_base_feeds_snippets_12543046747030237240"
+      ],
+      "score": 0.3022,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.601
+    },
+    {
+      "pair": [
+        "a_b000dzfdbi",
+        "b_http___www.google.com_base_feeds_snippets_17922830512683848229"
+      ],
+      "score": 0.663,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.353
+    },
+    {
+      "pair": [
+        "a_b000k6b3zu",
+        "b_http___www.google.com_base_feeds_snippets_5203121002407711533"
+      ],
+      "score": 0.3415,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 6.83
+    },
+    {
+      "pair": [
+        "a_b000h20hu4",
+        "b_http___www.google.com_base_feeds_snippets_12644706112820906522"
+      ],
+      "score": 0.3625,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.994
+    },
+    {
+      "pair": [
+        "a_b000aa878m",
+        "b_http___www.google.com_base_feeds_snippets_14837029540644805566"
+      ],
+      "score": 0.4486,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.527
+    },
+    {
+      "pair": [
+        "a_b00008mnxz",
+        "b_http___www.google.com_base_feeds_snippets_9445487736380311288"
+      ],
+      "score": 0.6714,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.493
+    },
+    {
+      "pair": [
+        "a_b000pgaimo",
+        "b_http___www.google.com_base_feeds_snippets_13312621869477195220"
+      ],
+      "score": 0.4615,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.38
+    },
+    {
+      "pair": [
+        "a_b00009apiu",
+        "b_http___www.google.com_base_feeds_snippets_10241038066142254106"
+      ],
+      "score": 0.7122,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.788
+    },
+    {
+      "pair": [
+        "a_b000eg6d5q",
+        "b_http___www.google.com_base_feeds_snippets_16690738478999740250"
+      ],
+      "score": 0.5471,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.137
+    },
+    {
+      "pair": [
+        "a_b0001d56uu",
+        "b_http___www.google.com_base_feeds_snippets_16072788843762697430"
+      ],
+      "score": 0.4935,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.42
+    },
+    {
+      "pair": [
+        "a_b000gkpds8",
+        "b_http___www.google.com_base_feeds_snippets_13718013650982127815"
+      ],
+      "score": 0.4281,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 2.393
+    },
+    {
+      "pair": [
+        "a_b000063v0z",
+        "b_http___www.google.com_base_feeds_snippets_13706565146686131007"
+      ],
+      "score": 0.3726,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.249
+    },
+    {
+      "pair": [
+        "a_b000v7vz1u",
+        "b_http___www.google.com_base_feeds_snippets_2461116331238857888"
+      ],
+      "score": 0.3846,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 6.744
+    },
+    {
+      "pair": [
+        "a_b000bc38o2",
+        "b_http___www.google.com_base_feeds_snippets_12383342975629473219"
+      ],
+      "score": 0.7,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.589
+    },
+    {
+      "pair": [
+        "a_b000hcl5sm",
+        "b_http___www.google.com_base_feeds_snippets_12905177887993533095"
+      ],
+      "score": 0.625,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.227
+    },
+    {
+      "pair": [
+        "a_b000iz8vqw",
+        "b_http___www.google.com_base_feeds_snippets_3000347833164648276"
+      ],
+      "score": 0.4444,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 3.723
+    },
+    {
+      "pair": [
+        "a_b000067fk7",
+        "b_http___www.google.com_base_feeds_snippets_13869960802688221937"
+      ],
+      "score": 0.4889,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.769
+    },
+    {
+      "pair": [
+        "a_b000bwzy7q",
+        "b_http___www.google.com_base_feeds_snippets_1759747759895818218"
+      ],
+      "score": 0.8333,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 4.791
+    },
+    {
+      "pair": [
+        "a_b00002s6sc",
+        "b_http___www.google.com_base_feeds_snippets_10496277297966281940"
+      ],
+      "score": 0.5475,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.236
+    },
+    {
+      "pair": [
+        "a_b00006sijq",
+        "b_http___www.google.com_base_feeds_snippets_10621416214836586442"
+      ],
+      "score": 0.5688,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.861
+    },
+    {
+      "pair": [
+        "a_b000ivhlgc",
+        "b_http___www.google.com_base_feeds_snippets_65578552457551022"
+      ],
+      "score": 0.45,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.931
+    },
+    {
+      "pair": [
+        "a_b000ie8u4g",
+        "b_http___www.google.com_base_feeds_snippets_17308332648335562662"
+      ],
+      "score": 0.3393,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 4.351
+    },
+    {
+      "pair": [
+        "a_b000fzxisg",
+        "b_http___www.google.com_base_feeds_snippets_10282477376383378142"
+      ],
+      "score": 0.8333,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.752
+    },
+    {
+      "pair": [
+        "a_b000ogsh3c",
+        "b_http___www.google.com_base_feeds_snippets_391160076939023566"
+      ],
+      "score": 0.3017,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 6.216
+    },
+    {
+      "pair": [
+        "a_b000hed3gm",
+        "b_http___www.google.com_base_feeds_snippets_14520556770161082452"
+      ],
+      "score": 0.3829,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 3.494
+    },
+    {
+      "pair": [
+        "a_b0008glgrm",
+        "b_http___www.google.com_base_feeds_snippets_4178014773187756948"
+      ],
+      "score": 0.7241,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.376
+    },
+    {
+      "pair": [
+        "a_b000gh2pa0",
+        "b_http___www.google.com_base_feeds_snippets_18358456393095637568"
+      ],
+      "score": 0.3267,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 6.969
+    },
+    {
+      "pair": [
+        "a_b0009yegpc",
+        "b_http___www.google.com_base_feeds_snippets_18259447335875519213"
+      ],
+      "score": 0.4,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.94
+    },
+    {
+      "pair": [
+        "a_b000o39u3q",
+        "b_http___www.google.com_base_feeds_snippets_17453432506391757198"
+      ],
+      "score": 0.4333,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.352
+    },
+    {
+      "pair": [
+        "a_b000h13a2w",
+        "b_http___www.google.com_base_feeds_snippets_2062975649512805986"
+      ],
+      "score": 0.4089,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 2.439
+    },
+    {
+      "pair": [
+        "a_b000gkli0a",
+        "b_http___www.google.com_base_feeds_snippets_18425416409544307946"
+      ],
+      "score": 0.3116,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.78
+    },
+    {
+      "pair": [
+        "a_b000314vvu",
+        "b_http___www.google.com_base_feeds_snippets_18384366678790095384"
+      ],
+      "score": 0.3577,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.849
+    },
+    {
+      "pair": [
+        "a_b000jvimau",
+        "b_http___www.google.com_base_feeds_snippets_12411157260503394365"
+      ],
+      "score": 0.5787,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.766
+    },
+    {
+      "pair": [
+        "a_b0001wn1a8",
+        "b_http___www.google.com_base_feeds_snippets_10092468528845066077"
+      ],
+      "score": 0.3261,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 3.041
+    },
+    {
+      "pair": [
+        "a_b000bcz8ng",
+        "b_http___www.google.com_base_feeds_snippets_3077454195131808819"
+      ],
+      "score": 0.562,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 2.902
+    },
+    {
+      "pair": [
+        "a_b000fem8ew",
+        "b_http___www.google.com_base_feeds_snippets_18395637668335924867"
+      ],
+      "score": 0.3373,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 2.232
+    },
+    {
+      "pair": [
+        "a_b0001gngl8",
+        "b_http___www.google.com_base_feeds_snippets_9889997485442958372"
+      ],
+      "score": 0.5784,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.498
+    },
+    {
+      "pair": [
+        "a_b000ndic86",
+        "b_http___www.google.com_base_feeds_snippets_13621056199586324139"
+      ],
+      "score": 0.3284,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.394
+    },
+    {
+      "pair": [
+        "a_b0001gu7di",
+        "b_http___www.google.com_base_feeds_snippets_13540884315258409885"
+      ],
+      "score": 0.4728,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.551
+    },
+    {
+      "pair": [
+        "a_b0000vmimw",
+        "b_http___www.google.com_base_feeds_snippets_18364436159487312703"
+      ],
+      "score": 0.3,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.992
+    },
+    {
+      "pair": [
+        "a_b000ovft92",
+        "b_http___www.google.com_base_feeds_snippets_10720405921949933758"
+      ],
+      "score": 0.329,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.737
+    },
+    {
+      "pair": [
+        "a_b00002s6sc",
+        "b_http___www.google.com_base_feeds_snippets_11023384475486845617"
+      ],
+      "score": 0.5475,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.43
+    },
+    {
+      "pair": [
+        "a_b00005auzh",
+        "b_http___www.google.com_base_feeds_snippets_17640225934406949646"
+      ],
+      "score": 0.4316,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.268
+    },
+    {
+      "pair": [
+        "a_b000pijt6i",
+        "b_http___www.google.com_base_feeds_snippets_16984572314608520314"
+      ],
+      "score": 0.3865,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 13.234
+    },
+    {
+      "pair": [
+        "a_b0007yepxc",
+        "b_http___www.google.com_base_feeds_snippets_18411046341072063935"
+      ],
+      "score": 0.3006,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.118
+    },
+    {
+      "pair": [
+        "a_b000o3bj3k",
+        "b_http___www.google.com_base_feeds_snippets_18204597739203681452"
+      ],
+      "score": 0.3025,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 10.254
+    },
+    {
+      "pair": [
+        "a_b0009suw5q",
+        "b_http___www.google.com_base_feeds_snippets_7631511138244446780"
+      ],
+      "score": 0.4,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.441
+    },
+    {
+      "pair": [
+        "a_b0002jtvng",
+        "b_http___www.google.com_base_feeds_snippets_5572182459728876600"
+      ],
+      "score": 0.3083,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.163
+    },
+    {
+      "pair": [
+        "a_b000o39u3g",
+        "b_http___www.google.com_base_feeds_snippets_10225446033682010691"
+      ],
+      "score": 0.3,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 13.51
+    },
+    {
+      "pair": [
+        "a_b0000dzfvd",
+        "b_http___www.google.com_base_feeds_snippets_12994019030325848337"
+      ],
+      "score": 0.42,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 5.52
+    },
+    {
+      "pair": [
+        "a_b000k7ving",
+        "b_http___www.google.com_base_feeds_snippets_13468530879861986847"
+      ],
+      "score": 0.3525,
+      "truth": true,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 4.727
+    },
+    {
+      "pair": [
+        "a_b000frqfe8",
+        "b_http___www.google.com_base_feeds_snippets_13703162595446844265"
+      ],
+      "score": 0.3173,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.98
+    },
+    {
+      "pair": [
+        "a_b000bs5ibm",
+        "b_http___www.google.com_base_feeds_snippets_15944513620809178120"
+      ],
+      "score": 0.35,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.855
+    },
+    {
+      "pair": [
+        "a_b0009qvgeo",
+        "b_http___www.google.com_base_feeds_snippets_1943468973342706865"
+      ],
+      "score": 0.3154,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 5.642
+    },
+    {
+      "pair": [
+        "a_b000053f92",
+        "b_http___www.google.com_base_feeds_snippets_9814257640405704198"
+      ],
+      "score": 0.7572,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.049
+    },
+    {
+      "pair": [
+        "a_b000m2yc32",
+        "b_http___www.google.com_base_feeds_snippets_11114112522015930440"
+      ],
+      "score": 0.4266,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.341
+    },
+    {
+      "pair": [
+        "a_b000ecqxjq",
+        "b_http___www.google.com_base_feeds_snippets_5615075942724114350"
+      ],
+      "score": 0.5866,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.841
+    },
+    {
+      "pair": [
+        "a_b000iwarqw",
+        "b_http___www.google.com_base_feeds_snippets_1209717630190599142"
+      ],
+      "score": 0.3319,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.333
+    },
+    {
+      "pair": [
+        "a_b000hkpb3e",
+        "b_http___www.google.com_base_feeds_snippets_17871729840721789776"
+      ],
+      "score": 0.3333,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 3.132
+    },
+    {
+      "pair": [
+        "a_b000edjjhs",
+        "b_http___www.google.com_base_feeds_snippets_17033785854482020785"
+      ],
+      "score": 0.4663,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 7.768
+    },
+    {
+      "pair": [
+        "a_b000qgixde",
+        "b_http___www.google.com_base_feeds_snippets_16999541650955311083"
+      ],
+      "score": 0.3,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 4.747
+    },
+    {
+      "pair": [
+        "a_b000h22rbg",
+        "b_http___www.google.com_base_feeds_snippets_16984973005966322912"
+      ],
+      "score": 0.3777,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.257
+    },
+    {
+      "pair": [
+        "a_b000g0lkcg",
+        "b_http___www.google.com_base_feeds_snippets_6320757184409585395"
+      ],
+      "score": 0.3,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.444
+    },
+    {
+      "pair": [
+        "a_b000ndib6y",
+        "b_http___www.google.com_base_feeds_snippets_18425560247022266254"
+      ],
+      "score": 0.4799,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.292
+    },
+    {
+      "pair": [
+        "a_b000jh7c6y",
+        "b_http___www.google.com_base_feeds_snippets_18159360858957097495"
+      ],
+      "score": 0.4692,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.431
+    },
+    {
+      "pair": [
+        "a_b0008glg1i",
+        "b_http___www.google.com_base_feeds_snippets_65639973300118271"
+      ],
+      "score": 0.3703,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.669
+    },
+    {
+      "pair": [
+        "a_b0001gu7di",
+        "b_http___www.google.com_base_feeds_snippets_16913213829530790894"
+      ],
+      "score": 0.3888,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.222
+    },
+    {
+      "pair": [
+        "a_b00009k780",
+        "b_http___www.google.com_base_feeds_snippets_18282499725938188855"
+      ],
+      "score": 0.3333,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 2.931
+    },
+    {
+      "pair": [
+        "a_b000hed3fs",
+        "b_http___www.google.com_base_feeds_snippets_4811212829822917671"
+      ],
+      "score": 0.5679,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 13.905
+    },
+    {
+      "pair": [
+        "a_b0000swyw4",
+        "b_http___www.google.com_base_feeds_snippets_13206617216897783894"
+      ],
+      "score": 0.3124,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.62
+    },
+    {
+      "pair": [
+        "a_b000ofnri8",
+        "b_http___www.google.com_base_feeds_snippets_2640184679506710701"
+      ],
+      "score": 0.3562,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 6.879
+    },
+    {
+      "pair": [
+        "a_b000ndibh8",
+        "b_http___www.google.com_base_feeds_snippets_13621056199586324139"
+      ],
+      "score": 0.4569,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.023
+    },
+    {
+      "pair": [
+        "a_b0008ewsf8",
+        "b_http___www.google.com_base_feeds_snippets_10066664236286478958"
+      ],
+      "score": 0.4738,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 2.533
+    },
+    {
+      "pair": [
+        "a_b0006g2tum",
+        "b_http___www.google.com_base_feeds_snippets_18352674914916743912"
+      ],
+      "score": 0.3016,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.026
+    },
+    {
+      "pair": [
+        "a_b00007bguc",
+        "b_http___www.google.com_base_feeds_snippets_17967569973770560353"
+      ],
+      "score": 0.3844,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 7.156
+    },
+    {
+      "pair": [
+        "a_b000emcays",
+        "b_http___www.google.com_base_feeds_snippets_727817609597268757"
+      ],
+      "score": 0.4819,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.009
+    },
+    {
+      "pair": [
+        "a_b000m5ailo",
+        "b_http___www.google.com_base_feeds_snippets_12963757372418515896"
+      ],
+      "score": 0.3542,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 6.968
+    },
+    {
+      "pair": [
+        "a_b000pg8kwe",
+        "b_http___www.google.com_base_feeds_snippets_15202414965182690664"
+      ],
+      "score": 0.4729,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 6.717
+    },
+    {
+      "pair": [
+        "a_b000ndibh8",
+        "b_http___www.google.com_base_feeds_snippets_13663736690242275539"
+      ],
+      "score": 0.3128,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 8.909
+    },
+    {
+      "pair": [
+        "a_b0008ewsai",
+        "b_http___www.google.com_base_feeds_snippets_11041238021562109147"
+      ],
+      "score": 0.4619,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 3.829
+    },
+    {
+      "pair": [
+        "a_b000ivl050",
+        "b_http___www.google.com_base_feeds_snippets_17962667015870936885"
+      ],
+      "score": 0.3265,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.115
+    },
+    {
+      "pair": [
+        "a_b0006g2wr2",
+        "b_http___www.google.com_base_feeds_snippets_18403352308945312678"
+      ],
+      "score": 0.5619,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.236
+    },
+    {
+      "pair": [
+        "a_b000h1xy3m",
+        "b_http___www.google.com_base_feeds_snippets_17451370028015177558"
+      ],
+      "score": 0.3362,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.186
+    },
+    {
+      "pair": [
+        "a_b000h25yr0",
+        "b_http___www.google.com_base_feeds_snippets_18264562147667335719"
+      ],
+      "score": 0.5197,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.552
+    },
+    {
+      "pair": [
+        "a_b000kbszns",
+        "b_http___www.google.com_base_feeds_snippets_4811212829822917671"
+      ],
+      "score": 0.4495,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.102
+    },
+    {
+      "pair": [
+        "a_b000fetuiy",
+        "b_http___www.google.com_base_feeds_snippets_14137502647216679305"
+      ],
+      "score": 0.3007,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 2.608
+    },
+    {
+      "pair": [
+        "a_b000e8jl80",
+        "b_http___www.google.com_base_feeds_snippets_16064170791328826375"
+      ],
+      "score": 0.3778,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.985
+    },
+    {
+      "pair": [
+        "a_b0006aaoiw",
+        "b_http___www.google.com_base_feeds_snippets_18106742966338682113"
+      ],
+      "score": 0.3,
+      "truth": true,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 6.837
+    },
+    {
+      "pair": [
+        "a_b000om7diq",
+        "b_http___www.google.com_base_feeds_snippets_11294551601294188336"
+      ],
+      "score": 0.3576,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.599
+    },
+    {
+      "pair": [
+        "a_b000mfgx7w",
+        "b_http___www.google.com_base_feeds_snippets_18416264451031093966"
+      ],
+      "score": 0.4956,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.19
+    },
+    {
+      "pair": [
+        "a_b000088ner",
+        "b_http___www.google.com_base_feeds_snippets_4776201646741876078"
+      ],
+      "score": 0.3576,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.062
+    },
+    {
+      "pair": [
+        "a_b000piht7e",
+        "b_http___www.google.com_base_feeds_snippets_16984572314608520314"
+      ],
+      "score": 0.3165,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 11.409
+    },
+    {
+      "pair": [
+        "a_b000gkpds8",
+        "b_http___www.google.com_base_feeds_snippets_5515688203820371988"
+      ],
+      "score": 0.5466,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.284
+    },
+    {
+      "pair": [
+        "a_b000h3lza4",
+        "b_http___www.google.com_base_feeds_snippets_13919947739364726744"
+      ],
+      "score": 0.4601,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 4.85
+    },
+    {
+      "pair": [
+        "a_b000ozibhk",
+        "b_http___www.google.com_base_feeds_snippets_18418631443367666576"
+      ],
+      "score": 0.3192,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 19.304
+    },
+    {
+      "pair": [
+        "a_b000b6vlh4",
+        "b_http___www.google.com_base_feeds_snippets_12768847283587745008"
+      ],
+      "score": 0.388,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.184
+    },
+    {
+      "pair": [
+        "a_b0006aao9g",
+        "b_http___www.google.com_base_feeds_snippets_15937975832085771486"
+      ],
+      "score": 0.4275,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.192
+    },
+    {
+      "pair": [
+        "a_b000nknb26",
+        "b_http___www.google.com_base_feeds_snippets_16685945982481680279"
+      ],
+      "score": 0.3,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.58
+    },
+    {
+      "pair": [
+        "a_b000ehs6h8",
+        "b_http___www.google.com_base_feeds_snippets_4818950838228892044"
+      ],
+      "score": 0.3374,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.838
+    },
+    {
+      "pair": [
+        "a_b00006ijx1",
+        "b_http___www.google.com_base_feeds_snippets_549551716004314019"
+      ],
+      "score": 0.375,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.049
+    },
+    {
+      "pair": [
+        "a_b000hcvr5s",
+        "b_http___www.google.com_base_feeds_snippets_12218017436042377109"
+      ],
+      "score": 0.4724,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.811
+    },
+    {
+      "pair": [
+        "a_b000k2t0ou",
+        "b_http___www.google.com_base_feeds_snippets_13916432686331461255"
+      ],
+      "score": 0.3066,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 15.354
+    },
+    {
+      "pair": [
+        "a_b0007d8eq2",
+        "b_http___www.google.com_base_feeds_snippets_18445465727364031756"
+      ],
+      "score": 0.3849,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.8,
+      "llm_called": true,
+      "seconds": 6.512
+    },
+    {
+      "pair": [
+        "a_b0001wn0m2",
+        "b_http___www.google.com_base_feeds_snippets_8324654787720267662"
+      ],
+      "score": 0.3357,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 14.141
+    },
+    {
+      "pair": [
+        "a_b0000dzfvd",
+        "b_http___www.google.com_base_feeds_snippets_53664055052324568"
+      ],
+      "score": 0.5,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.118
+    },
+    {
+      "pair": [
+        "a_b000ndick4",
+        "b_http___www.google.com_base_feeds_snippets_18195626752396679157"
+      ],
+      "score": 0.4251,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 5.387
+    },
+    {
+      "pair": [
+        "a_b000ieaplw",
+        "b_http___www.google.com_base_feeds_snippets_9680039907704769193"
+      ],
+      "score": 0.5871,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.463
+    },
+    {
+      "pair": [
+        "a_b000ndibh8",
+        "b_http___www.google.com_base_feeds_snippets_15289985273321283103"
+      ],
+      "score": 0.3381,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.25
+    },
+    {
+      "pair": [
+        "a_b000h2421o",
+        "b_http___www.google.com_base_feeds_snippets_13833288364308814775"
+      ],
+      "score": 0.3792,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.073
+    },
+    {
+      "pair": [
+        "a_b000he35ss",
+        "b_http___www.google.com_base_feeds_snippets_11153480872220659485"
+      ],
+      "score": 0.4056,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.023
+    },
+    {
+      "pair": [
+        "a_b000gcd6qc",
+        "b_http___www.google.com_base_feeds_snippets_17053187920066498620"
+      ],
+      "score": 0.6667,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.036
+    },
+    {
+      "pair": [
+        "a_b000ndibjq",
+        "b_http___www.google.com_base_feeds_snippets_14992670292987095559"
+      ],
+      "score": 0.4,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.834
+    },
+    {
+      "pair": [
+        "a_b000gkli0a",
+        "b_http___www.google.com_base_feeds_snippets_16555691540653957564"
+      ],
+      "score": 0.4908,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 12.771
+    },
+    {
+      "pair": [
+        "a_b0000dk573",
+        "b_http___www.google.com_base_feeds_snippets_17077922689318325801"
+      ],
+      "score": 0.4512,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 8.388
+    },
+    {
+      "pair": [
+        "a_b000bta4k6",
+        "b_http___www.google.com_base_feeds_snippets_13368550084570344351"
+      ],
+      "score": 0.3679,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.908
+    },
+    {
+      "pair": [
+        "a_b00009apiu",
+        "b_http___www.google.com_base_feeds_snippets_16709273410439592472"
+      ],
+      "score": 0.5632,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.093
+    },
+    {
+      "pair": [
+        "a_b0006b64v2",
+        "b_http___www.google.com_base_feeds_snippets_18369825056478487049"
+      ],
+      "score": 0.4434,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.794
+    },
+    {
+      "pair": [
+        "a_b000e3fn4g",
+        "b_http___www.google.com_base_feeds_snippets_8506958797516287357"
+      ],
+      "score": 0.3542,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.697
+    },
+    {
+      "pair": [
+        "a_b0002itt84",
+        "b_http___www.google.com_base_feeds_snippets_5505866551596188643"
+      ],
+      "score": 0.4138,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.194
+    },
+    {
+      "pair": [
+        "a_b000az841m",
+        "b_http___www.google.com_base_feeds_snippets_13164965529321114691"
+      ],
+      "score": 0.4286,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.035
+    },
+    {
+      "pair": [
+        "a_b000k6b3zu",
+        "b_http___www.google.com_base_feeds_snippets_14783944613059032198"
+      ],
+      "score": 0.3333,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.751
+    },
+    {
+      "pair": [
+        "a_b000h1xy3m",
+        "b_http___www.google.com_base_feeds_snippets_5974122079831285335"
+      ],
+      "score": 0.3167,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 7.949
+    },
+    {
+      "pair": [
+        "a_b000o39u3g",
+        "b_http___www.google.com_base_feeds_snippets_17453432506391757198"
+      ],
+      "score": 0.5556,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 5.448
+    },
+    {
+      "pair": [
+        "a_b000csramg",
+        "b_http___www.google.com_base_feeds_snippets_7150077051864937455"
+      ],
+      "score": 0.352,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.417
+    },
+    {
+      "pair": [
+        "a_b000mfgx7w",
+        "b_http___www.google.com_base_feeds_snippets_11246077198585695109"
+      ],
+      "score": 0.3356,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 2.426
+    },
+    {
+      "pair": [
+        "a_b000v7y5j4",
+        "b_http___www.google.com_base_feeds_snippets_17634318125830822917"
+      ],
+      "score": 0.375,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 3.588
+    },
+    {
+      "pair": [
+        "a_b000fzxipo",
+        "b_http___www.google.com_base_feeds_snippets_12642359421626863460"
+      ],
+      "score": 0.4286,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 4.566
+    },
+    {
+      "pair": [
+        "a_b0007iqg2q",
+        "b_http___www.google.com_base_feeds_snippets_18383108968754488314"
+      ],
+      "score": 0.4615,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 6.139
+    },
+    {
+      "pair": [
+        "a_b00076ywii",
+        "b_http___www.google.com_base_feeds_snippets_17077922689318325801"
+      ],
+      "score": 0.4974,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 10.118
+    },
+    {
+      "pair": [
+        "a_b000h13a2w",
+        "b_http___www.google.com_base_feeds_snippets_17149948893700452737"
+      ],
+      "score": 0.3339,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.733
+    },
+    {
+      "pair": [
+        "a_b000o3ek2m",
+        "b_http___www.google.com_base_feeds_snippets_18295506345742178609"
+      ],
+      "score": 0.6,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 5.743
+    },
+    {
+      "pair": [
+        "a_b000bgtvda",
+        "b_http___www.google.com_base_feeds_snippets_10087092539211280139"
+      ],
+      "score": 0.3164,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 3.083
+    },
+    {
+      "pair": [
+        "a_b0001fyrqc",
+        "b_http___www.google.com_base_feeds_snippets_12105115514315351902"
+      ],
+      "score": 0.4,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.708
+    },
+    {
+      "pair": [
+        "a_b000o3d94m",
+        "b_http___www.google.com_base_feeds_snippets_17453432506391757198"
+      ],
+      "score": 0.5,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.24
+    },
+    {
+      "pair": [
+        "a_b000i82j80",
+        "b_http___www.google.com_base_feeds_snippets_18386275313356170584"
+      ],
+      "score": 0.4,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 5.029
+    },
+    {
+      "pair": [
+        "a_b0007d8es0",
+        "b_http___www.google.com_base_feeds_snippets_18392141725886908183"
+      ],
+      "score": 0.5231,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 14.526
+    },
+    {
+      "pair": [
+        "a_b000b6jasg",
+        "b_http___www.google.com_base_feeds_snippets_17471276055285923188"
+      ],
+      "score": 0.664,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.798
+    },
+    {
+      "pair": [
+        "a_b000g80lqo",
+        "b_http___www.google.com_base_feeds_snippets_5654238078872944077"
+      ],
+      "score": 0.3318,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.372
+    },
+    {
+      "pair": [
+        "a_b000b6kh38",
+        "b_http___www.google.com_base_feeds_snippets_18277398973089665313"
+      ],
+      "score": 0.4267,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.142
+    },
+    {
+      "pair": [
+        "a_b000j54pac",
+        "b_http___www.google.com_base_feeds_snippets_17733079574233143461"
+      ],
+      "score": 0.3446,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 3.905
+    },
+    {
+      "pair": [
+        "a_b0008glgea",
+        "b_http___www.google.com_base_feeds_snippets_9643223122893875320"
+      ],
+      "score": 0.3163,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 7.373
+    },
+    {
+      "pair": [
+        "a_b000ivjsb8",
+        "b_http___www.google.com_base_feeds_snippets_17787032142812456248"
+      ],
+      "score": 0.55,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.515
+    },
+    {
+      "pair": [
+        "a_b00070ouja",
+        "b_http___www.google.com_base_feeds_snippets_17175991674191849246"
+      ],
+      "score": 0.332,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 7.867
+    },
+    {
+      "pair": [
+        "a_b000aoz7fo",
+        "b_http___www.google.com_base_feeds_snippets_13792413550965266630"
+      ],
+      "score": 0.3976,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 13.666
+    },
+    {
+      "pair": [
+        "a_b000ndic86",
+        "b_http___www.google.com_base_feeds_snippets_15620401128846734122"
+      ],
+      "score": 0.3393,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.253
+    },
+    {
+      "pair": [
+        "a_b000in4uak",
+        "b_http___www.google.com_base_feeds_snippets_12243674671451624208"
+      ],
+      "score": 0.4667,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 4.309
+    },
+    {
+      "pair": [
+        "a_b000j54pac",
+        "b_http___www.google.com_base_feeds_snippets_13221664962106693367"
+      ],
+      "score": 0.5786,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.82
+    },
+    {
+      "pair": [
+        "a_b000ogsyjy",
+        "b_http___www.google.com_base_feeds_snippets_2640184679506710701"
+      ],
+      "score": 0.4062,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.126
+    },
+    {
+      "pair": [
+        "a_b000bwzxk4",
+        "b_http___www.google.com_base_feeds_snippets_11641601394104549163"
+      ],
+      "score": 0.39,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.194
+    },
+    {
+      "pair": [
+        "a_b000qxd2tm",
+        "b_http___www.google.com_base_feeds_snippets_8261805484012687318"
+      ],
+      "score": 0.4195,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 7.391
+    },
+    {
+      "pair": [
+        "a_b000cnf014",
+        "b_http___www.google.com_base_feeds_snippets_12495037922890432173"
+      ],
+      "score": 0.4375,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.315
+    },
+    {
+      "pair": [
+        "a_b000euhk3g",
+        "b_http___www.google.com_base_feeds_snippets_14356986779854403622"
+      ],
+      "score": 0.7,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.102
+    },
+    {
+      "pair": [
+        "a_b0009y6ewu",
+        "b_http___www.google.com_base_feeds_snippets_6990565128537638388"
+      ],
+      "score": 0.3397,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 5.709
+    },
+    {
+      "pair": [
+        "a_b0000dbykm",
+        "b_http___www.google.com_base_feeds_snippets_18434163358494173665"
+      ],
+      "score": 0.5058,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 6.054
+    },
+    {
+      "pair": [
+        "a_b000bwbtwu",
+        "b_http___www.google.com_base_feeds_snippets_1035187390817409083"
+      ],
+      "score": 0.3111,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 13.302
+    },
+    {
+      "pair": [
+        "a_b000jlj0cy",
+        "b_http___www.google.com_base_feeds_snippets_16827217446944316033"
+      ],
+      "score": 0.4324,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 2.648
+    },
+    {
+      "pair": [
+        "a_b000h13a2w",
+        "b_http___www.google.com_base_feeds_snippets_8272889934889959685"
+      ],
+      "score": 0.3011,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.819
+    },
+    {
+      "pair": [
+        "a_b00005aycg",
+        "b_http___www.google.com_base_feeds_snippets_2519306436830554150"
+      ],
+      "score": 0.4731,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.976
+    },
+    {
+      "pair": [
+        "a_b000hcz8gc",
+        "b_http___www.google.com_base_feeds_snippets_9807438286656285076"
+      ],
+      "score": 0.4757,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.579
+    },
+    {
+      "pair": [
+        "a_b000enucs8",
+        "b_http___www.google.com_base_feeds_snippets_2519306436830554150"
+      ],
+      "score": 0.3566,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 4.444
+    },
+    {
+      "pair": [
+        "a_b000ndibwi",
+        "b_http___www.google.com_base_feeds_snippets_13621056199586324139"
+      ],
+      "score": 0.36,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 2.937
+    },
+    {
+      "pair": [
+        "a_b00005aycg",
+        "b_http___www.google.com_base_feeds_snippets_11248730528644543449"
+      ],
+      "score": 0.3699,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.438
+    },
+    {
+      "pair": [
+        "a_b00005aycg",
+        "b_http___www.google.com_base_feeds_snippets_15756558104583624199"
+      ],
+      "score": 0.3742,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 14.55
+    },
+    {
+      "pair": [
+        "a_b000hkpb3e",
+        "b_http___www.google.com_base_feeds_snippets_18427191929555331953"
+      ],
+      "score": 0.3,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 4.668
+    },
+    {
+      "pair": [
+        "a_b000gpsz42",
+        "b_http___www.google.com_base_feeds_snippets_17546591632033422235"
+      ],
+      "score": 0.4776,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.355
+    },
+    {
+      "pair": [
+        "a_b000e8jl7q",
+        "b_http___www.google.com_base_feeds_snippets_16064170791328826375"
+      ],
+      "score": 0.3368,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.959
+    },
+    {
+      "pair": [
+        "a_b000bgtvda",
+        "b_http___www.google.com_base_feeds_snippets_10066664236286478958"
+      ],
+      "score": 0.4209,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 3.078
+    },
+    {
+      "pair": [
+        "a_b000bav4ko",
+        "b_http___www.google.com_base_feeds_snippets_13303291667441511870"
+      ],
+      "score": 0.3645,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 6.934
+    },
+    {
+      "pair": [
+        "a_b00007g3ai",
+        "b_http___www.google.com_base_feeds_snippets_10901373095934236651"
+      ],
+      "score": 0.4661,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.101
+    },
+    {
+      "pair": [
+        "a_b00009apiu",
+        "b_http___www.google.com_base_feeds_snippets_15486017920946935068"
+      ],
+      "score": 0.7414,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 3.084
+    },
+    {
+      "pair": [
+        "a_b000o3bj3k",
+        "b_http___www.google.com_base_feeds_snippets_12942134175594025487"
+      ],
+      "score": 0.3359,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.541
+    },
+    {
+      "pair": [
+        "a_b000bt55a0",
+        "b_http___www.google.com_base_feeds_snippets_13816264129023871640"
+      ],
+      "score": 0.3228,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.9,
+      "llm_called": true,
+      "seconds": 3.305
+    },
+    {
+      "pair": [
+        "a_b000bwbtwu",
+        "b_http___www.google.com_base_feeds_snippets_13540884315258409885"
+      ],
+      "score": 0.3043,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 4.875
+    },
+    {
+      "pair": [
+        "a_b0009dwkwo",
+        "b_http___www.google.com_base_feeds_snippets_15744420000863688597"
+      ],
+      "score": 0.4562,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.524
+    },
+    {
+      "pair": [
+        "a_b0008glgrm",
+        "b_http___www.google.com_base_feeds_snippets_11641601394104549163"
+      ],
+      "score": 0.3741,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.99,
+      "llm_called": true,
+      "seconds": 2.686
+    },
+    {
+      "pair": [
+        "a_b000ndibjq",
+        "b_http___www.google.com_base_feeds_snippets_18195626752396679157"
+      ],
+      "score": 0.3236,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 1.0,
+      "llm_called": true,
+      "seconds": 5.633
+    },
+    {
+      "pair": [
+        "a_b000088nqp",
+        "b_http___www.google.com_base_feeds_snippets_9558419339728905800"
+      ],
+      "score": 0.7621,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 6.196
+    },
+    {
+      "pair": [
+        "a_b000bwbtwu",
+        "b_http___www.google.com_base_feeds_snippets_6205544377126393085"
+      ],
+      "score": 0.5058,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.726
+    },
+    {
+      "pair": [
+        "a_b0006b6b1a",
+        "b_http___www.google.com_base_feeds_snippets_18378422702839985200"
+      ],
+      "score": 0.4099,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.807
+    },
+    {
+      "pair": [
+        "a_b000bx0006",
+        "b_http___www.google.com_base_feeds_snippets_4471778480425102828"
+      ],
+      "score": 0.3027,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.145
+    },
+    {
+      "pair": [
+        "a_b000ndid62",
+        "b_http___www.google.com_base_feeds_snippets_18383405503824080160"
+      ],
+      "score": 0.4751,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.98,
+      "llm_called": true,
+      "seconds": 5.326
+    },
+    {
+      "pair": [
+        "a_b0009dt87e",
+        "b_http___www.google.com_base_feeds_snippets_13017887935047670097"
+      ],
+      "score": 0.7,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.155
+    },
+    {
+      "pair": [
+        "a_b000io7a9m",
+        "b_http___www.google.com_base_feeds_snippets_13440353610523579374"
+      ],
+      "score": 0.3405,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.391
+    },
+    {
+      "pair": [
+        "a_b000io79mu",
+        "b_http___www.google.com_base_feeds_snippets_16679606764474753015"
+      ],
+      "score": 0.3843,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.57
+    },
+    {
+      "pair": [
+        "a_b000i4rmfe",
+        "b_http___www.google.com_base_feeds_snippets_13439509868413695693"
+      ],
+      "score": 0.3103,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 3.584
+    },
+    {
+      "pair": [
+        "a_b0009x6qew",
+        "b_http___www.google.com_base_feeds_snippets_10066664236286478958"
+      ],
+      "score": 0.3116,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 10.354
+    },
+    {
+      "pair": [
+        "a_b000k2pa3a",
+        "b_http___www.google.com_base_feeds_snippets_8251934342990013076"
+      ],
+      "score": 0.3121,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.85,
+      "llm_called": true,
+      "seconds": 4.267
+    },
+    {
+      "pair": [
+        "a_b000067fk7",
+        "b_http___www.google.com_base_feeds_snippets_22081347244611883"
+      ],
+      "score": 0.4956,
+      "truth": true,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.966
+    },
+    {
+      "pair": [
+        "a_b000o3ek2m",
+        "b_http___www.google.com_base_feeds_snippets_5609692463569230619"
+      ],
+      "score": 0.3,
+      "truth": false,
+      "llm_decision": "match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.603
+    },
+    {
+      "pair": [
+        "a_b000bawkpm",
+        "b_http___www.google.com_base_feeds_snippets_3137318477096164629"
+      ],
+      "score": 0.3053,
+      "truth": false,
+      "llm_decision": "no_match",
+      "llm_confidence": 0.95,
+      "llm_called": true,
+      "seconds": 2.806
+    }
+  ]
+}

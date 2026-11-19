@@ -25,8 +25,8 @@ This matrix documents tested compatibility across embedding runtimes, LLM provid
 "Supported" below means the provider works through the verifier. It says
 nothing about whether a given model is any good at match verification, and on
 that the measurements are blunt: on 200 ambiguous Amazon-Google pairs,
-`llama3.1:8b` scored **0.505** accuracy against **0.563** for the plain score
-threshold, while `gemini-3.8-flash` scored **0.814** at about $1.90 per 1,000
+`llama3.1:8b` scored **0.510** accuracy against **0.565** for the plain score
+threshold, while `gemini-3.8-flash` scored **0.810** at about $2.00 per 1,000
 pairs. A smaller local model is not expected to do better than the 8B one. See
 [BENCHMARKS.md](../BENCHMARKS.md#llm-verification-of-the-ambiguous-band-measured),
 and measure on your own data before relying on any model here.
