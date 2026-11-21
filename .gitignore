@@ -143,7 +143,13 @@ COVERAGE_SUMMARY.txt
 detailed_coverage_analysis_*.json
 
 # Local Claude Code harness config (per-user, not project-shared)
-.claude/
+.claude/*
+# Skills are source and meant to be shared -- but only ones reviewed for private
+# content (absolute paths, internal endpoints) are un-ignored, one at a time.
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/pr-review/
+!.claude/skills/code-quality-review/
 # .cursor/ is per-user, except the estate-wide rules that are reviewed and tracked.
 # (A directory pattern like `.cursor/` cannot be re-included from, hence `/*`.)
 .cursor/*
